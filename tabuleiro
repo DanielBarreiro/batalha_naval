@@ -1,4 +1,7 @@
-void tabuleiro(){
+#include <stdio.h>
+#include <stdlib.h>
+#include <conio.c>
+tabuleiro(){
 
 int c,l,n=10;
 
