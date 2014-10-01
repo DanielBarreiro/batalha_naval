@@ -1,0 +1,11 @@
+// Função Intro : Apresenta um menu inicial com o nome do jogo, a versão e o nome dos autores. Apenas avança para o resto 
+// do programa quando o utilizador primir uma tecla:
+
+void fnc_intro(void) {
+    printf("      -------------------------------------------\n");
+    printf("\t\t\tBATALHA NAVAL\n\n");
+    printf("\tFeito por: Daniel Barreiro e Fabio Gaspar\n\n");
+    printf("\t\tPrima uma tecla para comecar...\n\n");
+    printf("      -------------------------------------------\n");
+    system("PAUSE");
+}
