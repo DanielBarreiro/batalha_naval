@@ -3,9 +3,11 @@
 //#include <conio.c>
 #include <time.h>
 
+
 #define MAX 200
 
-struct rank{
+struct rank
+{
 
     char nome[MAX];
     int njogadas;
@@ -13,19 +15,23 @@ struct rank{
 
 
 
-void tabuleiro(int t[][11]){
+void tabuleiro(int t[][11])
+{
 
     int c,l;
 
-    for(l=0;l<10;l++){
-        for(c=0;c<10;c++){
+    for(l=0; l<10; l++)
+    {
+        for(c=0; c<10; c++)
+        {
             t[l][c]=0;
         }
     }
 
 }
 
-void random(int a[][11]){
+void random(int a[][11])
+{
 
     int c,c1,r;
     printf("Insira a coluna\n");
@@ -34,121 +40,399 @@ void random(int a[][11]){
     scanf("%d",&c1);
     r= rand()%2+1;
     printf("r= %d\n",r);
-    if(r==1){
+    if(r==1)
+    {
         a[c][c1]=1;
     }
 }
 
 
-void barcos(int t2[][11]){
+void barcos(int t2[][11])
+{
 
- int b[3];
- int c,l,d,hv;
- b[0]=2;
- b[1]=3;
- b[2]=4;
- d=rand()%4+1;
- hv=rand()%2+1;
- //o d vai mudar a diracção do navio
- // funcoes para inserir o porta-avioes
- if(d==1){
-    do{
-        c= rand()%10;
-        l= rand()%10;
-    }while (((t2[l][c]!=0) && (t2[l+1][c]!= 0) && (t2[l-1][c]!= 0) && (t2[l][c+1]!=0) && (t2[l][c+2]!=0) && (t2[l-2][c]!=0) && (t2[l-2][c+1]!=0) &&(t2[l-2][c-1]!=0) && (t2[l][c-1]!=0) && (t2[l-1][c-1]!=0) && (t2[l-1][c+1]!=0) && (t2[l+1][c-1]!=0) && (t2[l+1][c+1]!=0) && (t2[l+2][c-1]!=0) && (t2[l+2][c]!=0) && [t2[l+2][c+1]!=0) &&(t2[l+1][c+2]!=0) && (t2[l+1][c+3]!=0) && (t2[l][c+3]!=0) && (t2[l-1][c+2]!=0) && (t2[l-1][c+3]!=0)) || (c>6 || (l<2 || l>8)));
-    t2[l][c]=2;
-    t2[l+1][c]=2;
-    t2[l-1][c]=2;
-    t2[l][c+1]=2;
-    t2[l][c+2]=2;
-    printf("%d\n",d);
+    int b[3];
+    int c,l,d,hv,c1,l1,cont=0,rnavios=0,i=0,i1=5;
+    b[0]=1;
+    b[1]=2;
+    b[2]=3;
+    b[3]=4;
+    d=rand()%4+1;
+//o d vai mudar a diracção do navio
+// funcoes para inserir o porta-avioes
 
+
+    c=rand()%6; //Coordenada para o porta-avioes
+    l=rand()%6; // tem de ser inferior a 6 senao pode sair fora do tabuleiro
+
+    switch (d)
+    {
+    case 1:
+    {
+        t2[l+1][c+2]=2; // ----B---
+        t2[l+2][c+2]=2; // ----B---
+        t2[l+3][c+1]=2; // ---BBB--
+        t2[l+3][c+2]=2;
+        t2[l+3][c+3]=2;
+        break;
+    }
+    case 2:
+    {
+        t2[l+1][c+1]=2; // ---B----
+        t2[l+2][c+1]=2; // ---BBB--
+        t2[l+2][c+2]=2; // ---B----
+        t2[l+2][c+3]=2;
+        t2[l+3][c+1]=2;
+        break;
+    }
+    case 3:
+    {
+        t2[l+1][c+1]=2; // ---BBB---
+        t2[l+1][c+2]=2; // ----B----
+        t2[l+1][c+3]=2; // ----B----
+        t2[l+2][c+2]=2;
+        t2[l+3][c+2]=2;
+        break;
+    }
+    case 4:
+    {
+        t2[l+2][c+1]=2; // -----B---
+        t2[l+2][c+2]=2; // ---BBB---
+        t2[l+1][c+3]=2; // -----B---
+        t2[l+2][c+3]=2;
+        t2[l+3][c+3]=2;
+        break;
+    }
+    }
+    //inserir os navios que faltam
+
+       while(b[3]>0){
+
+        if(b[rnavios]<=0){
+            rnavios++;
+            i1--;
+            i+=3;
+        }
+        do
+        {
+            hv=rand()%2+1;
+            cont=0;
+            if(hv==1)
+            {
+                if(c<=3)
+                    c=rand()%3+4;
+                else
+                    c=rand()%7;
+                switch (rnavios){
+                    case 0:{
+                        l=rand()%5;
+                        break;}
+                    case 1:{
+                        l=rand()%7;
+                        break;}
+                    case 2:{
+                        l=rand()%8;
+                        break;}
+                    case 3:{
+                        l=rand()%9;
+                        break;}
+                    }
+                for(l1=l; l1<=l+i1; l1++)
+                {
+                    for(c1=c; c1<=c+2; c1++)
+                    {
+                        if(t2[l1][c1]!=0)
+                        {
+                            l1=10;
+                            c1=10;
+                            cont=1;
+                        }
+                       /* if(t2[l1][c1]==0)
+                        {
+                            cont++;
+                            //printf("cont v= %d\n",cont);
+                        }*/
+                    }
+                }
+              //  printf("cont v= %d\n",cont);
+              /*  if(cont!=18-i)
+            {
+                cont=0;
+            }*/
+            }
+            if(hv==2)
+            {
+                if(l<=3)
+                    l=rand()%3+4;
+                else
+                    l=rand()%7;
+                switch (rnavios){
+                    case 0:{
+                        c=rand()%5;
+                        break;}
+                    case 1:{
+                        c=rand()%7;
+                        break;}
+                    case 2:{
+                        c=rand()%8;
+                        break;}
+                    case 3:{
+                        c=rand()%9;
+                        break;}
+                }
+                for(l1=l; l1<=l+2; l1++)
+                {
+                    for(c1=c; c1<=c+i1; c1++)
+                    {
+                        if(t2[l1][c1]!=0)
+                        {
+                            l1=10;
+                            c1=10;
+                            cont=1;
+                        }
+                        /*if(t2[l1][c1]==0)
+                        {
+                            cont++;
+                            //printf("cont h= %d\n",cont);
+
+                    }*/
+                }
+            }
+           /* printf("cont h= %d\n",cont);
+            printf("c= %d\n",c+1);
+            printf("l= %d\n",l+1);
+            printf("i= %d   i1= %d\n",i,i1);
+            if(cont!=18-i)
+            {
+                cont=0;
+            }*/
+            }
+
+        }while(cont!=0);
+
+        switch(rnavios){
+            case 0:{
+                if (hv==1)       //navio de 4
+                    {
+                    t2[l+1][c+1]=2;
+                    t2[l+2][c+1]=2;
+                    t2[l+3][c+1]=2;
+                    t2[l+4][c+1]=2;
+                }
+                else{
+                    t2[l+1][c+1]=2;
+                    t2[l+1][c+2]=2;
+                    t2[l+1][c+3]=2;
+                    t2[l+1][c+4]=2;
+                }
+                break;
+            }
+            case 1:{
+                if(hv==1)      //barco de 3
+                {
+                    t2[l+1][c+1]=2;
+                    t2[l+2][c+1]=2;
+                    t2[l+3][c+1]=2;
+                }else{
+                    t2[l+1][c+1]=2;
+                    t2[l+1][c+2]=2;
+                    t2[l+1][c+3]=2;
+                }
+                 break;}
+            case 2:if(hv==1)          //barco de 2
+                {
+                    t2[l+1][c+1]=2;
+                    t2[l+2][c+1]=2;
+                }else{
+                    t2[l+1][c+1]=2;
+                    t2[l+1][c+2]=2;
+                }
+                break;
+            case 3://t2[l+1][c+1]=2;  // barco de 1
+                break;
+        }
+        b[rnavios]-=1;
+        cont=0;
+       // printf("b[%d]= %d\n",rnavios,b[rnavios]);
+       }
+
+
+
+/*
+    do
+    {
+
+        if(b[rnavios]<=0)  //se o valor no indice rnavios da variavel b for 0 aumenta o contador para passar para o proximo
+        {
+            rnavios++;
+            i+=3;           // aumenta o valor de i para diminuir o tamanho da caixa
+            i1--;           // aumenta o valor de i1 para diminuir o total de linhas da caixa
+        }
+        hv=rand()%2+1;
+        if(hv==1)
+        {
+            do
+            {
+                c=rand()%7;
+                switch (rnavios){
+                case 0:{
+                    l=rand()%4;
+                    break;}
+                case 1:{
+                    l=rand()%5;
+                    break;}
+                case 2:{
+                    l=rand()%6;
+                    break;}
+                case 3:{
+                    l=rand()%7;
+                    break;}
+                }
+                printf("l= %d  c= %d\n",l,c);
+                for(l1=l; l1<=l+i1; l1++){
+                    for(c1=c; c1<=c+2; c1++){
+                        if(t2[l1][c1]==0){
+                            cont++;
+                            //printf("cont v= %d\n",cont);
+                        }
+                    }
+                }
+                printf("cont v= %d\n",cont);
+                if(cont!=18-i){
+                    cont=0;
+                }
+            }while(cont!=18-i);
+        }else
+        {
+            do{
+                c=rand()%7;
+                switch (rnavios){
+                case 0:{
+                    l=rand()%4;
+                    break;}
+                case 1:{
+                    l=rand()%5;
+                    break;}
+                case 2:{
+                    l=rand()%6;
+                    break;}
+                case 3:{
+                    l=rand()%7;
+                    break;}
+                }
+                printf("l= %d  c= %d\n",l,c);
+                for(l1=l; l1<=l+2; l1++){
+                    for(c1=c; c1<=c+i1; c1++){
+                        if(t2[l1][c1]==0){
+                            cont++;
+                            //printf("cont h= %d\n",cont);
+                        }
+                    }
+                }
+                printf("cont h= %d\n",cont);
+                if(cont!=18-i){
+                    cont=0;
+                }
+            }while(cont!=18-i);
+        }
+            switch (rnavios){
+            case 0:{
+                if (hv==1)       //navio de 4
+                    {
+                    t2[l+1][c+1]=2;
+                    t2[l+2][c+1]=2;
+                    t2[l+3][c+1]=2;
+                    t2[l+4][c+1]=2;
+                }
+                else{
+                    t2[l+1][c+1]=2;
+                    t2[l+1][c+2]=2;
+                    t2[l+1][c+3]=2;
+                    t2[l+1][c+4]=2;
+                }
+                b[rnavios]--;
+                break;
+            }
+            case 1:{
+                if(hv==1)      //barco de 3
+                {
+                    t2[l+1][c+1]=2;
+                    t2[l+2][c+1]=2;
+                    t2[l+3][c+1]=2;
+                }else{
+                    t2[l+1][c+1]=2;
+                    t2[l+1][c+2]=2;
+                    t2[l+1][c+3]=2;
+                }
+                b[rnavios]--;
+                break;
+            }
+            case 2:{
+                if(hv==1)          //barco de 2
+                {
+                    t2[l+1][c+1]=2;
+                    t2[l+2][c+1]=2;
+                }else{
+                    t2[l+1][c+1]=2;
+                    t2[l+1][c+2]=2;
+                }
+                b[rnavios]--;
+                break;
+            }
+            case 3:{
+                t2[l+1][c+1]=2;  // barco de 1
+                b[rnavios]--;
+                break;
+            }
+            }
+        b[rnavios]-=1;
+    }while(b[3]>0);*/
 }
-if(d==2){
-    do{
-        c= rand()%10;
-        l= rand()%10;
-    }while ((t2[l][c] != 0 && t2[l][c-1]!=0 && t2[l][c+1]!=0 && t2[l-1][c]!=0 && t2[l-2][c]!=0) || (l<2 || (c>8 || c<2)));
-    t2[l][c]=2;
-    t2[l][c-1]=2;
-    t2[l][c+1]=2;
-    t2[l-1][c]=2;
-    t2[l-2][c]=2;
-    printf("%d\n",d);
-}
-if(d==3){
-    do{
-        c= rand()%10;
-        l= rand()%10;
-    }while((t2[l][c]!=0 && t2[l-1][c]!=0 && t2[l+1][c]!=0 && t2[l][c-1]!=0 && t2[l][c-2]!=0) || (c<3 || (l>7 || l<3)));
-    t2[l][c]=2;
-    t2[l-1][c]=2;
-    t2[l+1][c]=2;
-    t2[l][c-1]=2;
-    t2[l][c-2]=2;
-    printf("%d\n",d);
-}
 
-if(d==4){
-    do{
-        c= rand()%10;
-        l= rand()%10;
-    }while(((t2[l][c]!=0) && (t2[l][c-1]!=0) && (t2[l][c+1]!=0) && (t2[l+1][c]!=0) && (t2[l+2][c]!=0)) || (l>7 || (c<2 || c==9)));
-    t2[l][c]=2;
-    t2[l][c-1]=2;
-    t2[l][c+1]=2;
-    t2[l+1][c]=2;
-    t2[l+2][c]=2;
-    printf("%d\n",d);
+void dtabuleiro(int t1[][11])
+{
 
-}
-// funcoes para inserir o resto dos navios
-
-
-
-
-}
-
-void dtabuleiro(int t1[][11]){
-
-int c,l,n=1;
+    int c,l,n=1;
 
 //textcolor(15); // poem a cor do texto em branco brilhante
-printf("      -------------------------------------------\n");
-for(l=0; l<10; l++){
+    printf("      -------------------------------------------\n");
+    for(l=0; l<10; l++)
+    {
 
         printf("  %2.d |",n);
-    for(c=0;c<10;c++){
-        //textcolor(9); // poem a cor do texto em azul claro
-        //printf("   ~");
-        if(t1[l][c]==0){
-            printf("   ~");
+        for(c=0; c<10; c++)
+        {
+            //textcolor(9); // poem a cor do texto em azul claro
+            //printf("   ~");
+            if(t1[l][c]==0)
+            {
+                printf("   ~");
+            }
+            if(t1[l][c]==2)
+            {
+                printf("   #");
+            }
         }
-        if(t1[l][c]==2){
-            printf("   #");
-        }
+        //textcolor(15); // poem a cor do texto em branco brilhante
+        printf("   |");
+        printf("\n");
+        n++;
     }
-    //textcolor(15); // poem a cor do texto em branco brilhante
-    printf("   |");
-    printf("\n");
-    n++;
-}
-printf("      -------------------------------------------\n");
-printf("         A   B   C   D   E   F   G   H   I   J   \n");
+    printf("      -------------------------------------------\n");
+    printf("         A   B   C   D   E   F   G   H   I   J   \n");
 //textcolor(7); // poem a cor do texto em branco
 
 }
+int main ()
+{
 
-int main (){
-
-int coordenadas[11][11];
-srand(time(NULL));
-printf("\n");
-tabuleiro(coordenadas);
-barcos(coordenadas);
+    int coordenadas[11][11];
+    srand(time(NULL));
+    printf("\n");
+    tabuleiro(coordenadas);
+    barcos(coordenadas);
 //random(coordenadas);
-dtabuleiro(coordenadas);
+    dtabuleiro(coordenadas);
 
 
-return 0;
+    return 0;
 }
