@@ -1,6 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
-//#include <conio.c>
+#include <conio.c>
 #include <time.h>
 
 
@@ -20,9 +20,9 @@ void tabuleiro(int t[][11])
 
     int c,l;
 
-    for(l=0; l<10; l++)
+    for(l=0; l<=10; l++)
     {
-        for(c=0; c<10; c++)
+        for(c=0; c<=10; c++)
         {
             t[l][c]=0;
         }
@@ -118,10 +118,10 @@ void barcos(int t2[][11])
             cont=0;
             if(hv==1)
             {
-                if(c<=3)
-                    c=rand()%3+4;
+                if(c<=4)
+                    c=rand()%4+4;
                 else
-                    c=rand()%7;
+                    c=rand()%8;
                 switch (rnavios){
                     case 0:{
                         l=rand()%5;
@@ -161,10 +161,10 @@ void barcos(int t2[][11])
             }
             if(hv==2)
             {
-                if(l<=3)
-                    l=rand()%3+4;
+                if(l<=4)
+                    l=rand()%4+4;
                 else
-                    l=rand()%7;
+                    l=rand()%8;
                 switch (rnavios){
                     case 0:{
                         c=rand()%5;
@@ -262,7 +262,7 @@ void dtabuleiro(int t1[][11])
 
     int c,l,n=1;
 
-//textcolor(15); // poem a cor do texto em branco brilhante
+    textcolor(15); // poem a cor do texto em branco brilhante
     printf("      -------------------------------------------\n");
     for(l=0; l<10; l++)
     {
@@ -270,25 +270,25 @@ void dtabuleiro(int t1[][11])
         printf("  %2.d |",n);
         for(c=0; c<10; c++)
         {
-            //textcolor(9); // poem a cor do texto em azul claro
-            //printf("   ~");
+            textcolor(9); // poem a cor do texto em azul claro
             if(t1[l][c]==0)
             {
                 printf("   ~");
             }
+            textcolor(8);
             if(t1[l][c]==2)
             {
                 printf("   #");
             }
         }
-        //textcolor(15); // poem a cor do texto em branco brilhante
+        textcolor(15); // poem a cor do texto em branco brilhante
         printf("   |");
         printf("\n");
         n++;
     }
     printf("      -------------------------------------------\n");
     printf("         A   B   C   D   E   F   G   H   I   J   \n");
-//textcolor(7); // poem a cor do texto em branco
+    textcolor(7); // poem a cor do texto em branco
 
 }
 int main ()
@@ -305,3 +305,4 @@ int main ()
 
     return 0;
 }
+
