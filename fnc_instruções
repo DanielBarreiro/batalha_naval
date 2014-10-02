@@ -1,0 +1,15 @@
+// Função que apresenta as intruções do jogo da batalha naval:
+
+void fnc_intrucoes(void) {
+    system("cls");
+    printf("-------------------------------------------\n");
+    printf("O adversario ira colocar 5 barcos aleatoriamente\n\n");
+    printf("Os barcos nao podem estar juntos!\n\n");
+    printf("A cada jogada o utilizador introduz uma coordenada e o computador verifica-a\n\n");
+    printf("Caso acerte o computador ira revelar a coordenada com um '#'\n\n");
+    printf("Caso falhe o computador ira mudar a cor da posicao\n\n");
+    printf("O jogo acaba quando todos os barcos forem destruidos\n\n");
+    printf("-------------------------------------------\n");
+    system("PAUSE");
+    fnc_menu();
+}
