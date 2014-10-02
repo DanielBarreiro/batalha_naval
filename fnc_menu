@@ -1,0 +1,27 @@
+// Função que cria o menu principal onde é apresentado 3 opções "Começar Novo Jogo", "Instruções", "Leaderboards", e pede ao utilizador
+// para introduzir uma opcao, caso o utilizador introduza um opcao invalida a funcao ira mostrar a mensagem "Opcão Inválida
+// e repetir o menu.
+
+void fnc_menu(void) {
+    system("cls");
+    int opcao;
+    do {
+        printf("      -------------------------------------------\n");
+        printf("\t\t\tEscolha um opcao\n\n");
+        printf("\t\t\t1 - Comecar Jogo\n\t\t\t2 - Intrucoes\n\t\t\t3 - Leaderboard\n\t\t\t0 - Sair\n");
+        printf("      -------------------------------------------\n\n");
+        scanf("\t\t\t%d",&opcao);
+        fflush(stdin);
+        if(opcao <0 || opcao>3) {
+            printf("\n\n\t\t\tOpcao Invalida!");
+            Sleep(1000);
+            system("cls");
+        }
+    } while (opcao<0 || opcao>3);
+    switch(opcao) {
+        case 1: {break;}
+        case 2: {fnc_intrucoes(); break;}
+        case 3: {break;}
+        default: {break;}
+    }
+}
