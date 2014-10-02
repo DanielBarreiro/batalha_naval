@@ -1,5 +1,5 @@
 // Função Intro : Apresenta um menu inicial com o nome do jogo, a versão e o nome dos autores. Apenas avança para o resto 
-// do programa quando o utilizador primir uma tecla:
+// do programa quando o utilizador prima uma tecla:
 
 void fnc_intro(void) {
     printf("      -------------------------------------------\n");
