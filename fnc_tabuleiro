@@ -1,0 +1,25 @@
+// Funcao que escreve o tabuleiro da batalha naval com o eixo y em numeros e o eixo x em letras.
+#include <conio.h>
+
+void fnc_tabuleiro(void)
+{
+    int c,l,n=10;
+    textcolor(15); // poem a cor do texto em branco brilhante
+    printf("      -------------------------------------------\n");
+    for(l=0; l<10; l++)
+    {
+        printf("  %2.d |",n);
+        for(c=0; c<10; c++)
+        {
+            textcolor(9); // poem a cor do texto em azul claro
+            printf("   ~");
+        }
+        textcolor(15); // poem a cor do texto em branco brilhante
+        printf("   |");
+        printf("\n");
+        n--;
+    }
+    printf("      -------------------------------------------\n");
+    printf("         A   B   C   D   E   F   G   H   I   J   \n");
+    textcolor(7); // poem a cor do texto em branco
+
