@@ -116,6 +116,9 @@ void barcos(int t2[][11])
         {
             hv=rand()%2+1;
             cont=0;
+            if(rnavios==3){
+                hv=1;
+            }
             if(hv==1)
             {
                 if(c<=4)
@@ -136,19 +139,18 @@ void barcos(int t2[][11])
                         l=rand()%9;
                         break;}
                     }
-                for(l1=l; l1<=l+i1; l1++)
-                {
-                    for(c1=c; c1<=c+2; c1++)
+                        for(l1=l; l1<=l+i1; l1++)
                     {
-                        if(t2[l1][c1]!=0)
+                        for(c1=c; c1<=c+2; c1++)
                         {
-                            l1=10;
-                            c1=10;
-                            cont=1;
+                            if(t2[l1][c1]!=0)
+                            {
+                                l1=10;
+                                c1=10;
+                                cont=1;
+                            }
                         }
                     }
-                }
-
             }
             if(hv==2)
             {
@@ -224,16 +226,17 @@ void barcos(int t2[][11])
                     t2[l+1][c+2]=2;
                 }
                 break;
-            case 3: if(hv==1 || hv== 2){
-                    t2[l+1][c+1]=2;  // barco de 1
+            case 3: if(hv==1){
+                        t2[l+1][c+1]=2;  // barco de 1
                     }
                 break;
         }
         b[rnavios]-=1;
         cont=0;
         printf("b[%d] = %d\n",rnavios,b[rnavios]);
-       }
 
+
+}
 }
 
 void dtabuleiro(int t1[][11])
@@ -243,11 +246,11 @@ void dtabuleiro(int t1[][11])
 
    // textcolor(15); // poem a cor do texto em branco brilhante
     printf("      -------------------------------------------\n");
-    for(l=0; l<10; l++)
+    for(l=1; l<=10; l++)
     {
 
         printf("  %2.d |",n);
-        for(c=0; c<10; c++)
+        for(c=1; c<=10; c++)
         {
             //textcolor(9); // poem a cor do texto em azul claro
             if(t1[l][c]==0)
