@@ -30,19 +30,22 @@ void tabuleiro(int t[][11])
 
 }
 
-void random(int a[][11])
+void tiro(int a[][11],int *barcos1)
 {
 
-    int c,c1,r;
+    int c,c1;
     printf("Insira a coluna\n");
     scanf("%d",&c);
     printf("Insira a lina\n");
     scanf("%d",&c1);
-    r= rand()%2+1;
-    printf("r= %d\n",r);
-    if(r==1)
-    {
-        a[c][c1]=1;
+    if(a[c][c1]>0){
+        printf("Acertou em um navio!\n");
+        a[c][c1]=-1;
+        barcos1--;
+    }
+    else{
+        printf("Acertou na agua\n");
+        a[c][c1]=-2;
     }
 }
 
@@ -68,38 +71,38 @@ void barcos(int t2[][11])
     {
     case 1:
     {
-        t2[l+1][c+2]=2; // ----B---
-        t2[l+2][c+2]=2; // ----B---
-        t2[l+3][c+1]=2; // ---BBB--
-        t2[l+3][c+2]=2;
-        t2[l+3][c+3]=2;
+        t2[l+1][c+2]=1; // ----B---
+        t2[l+2][c+2]=1; // ----B---
+        t2[l+3][c+1]=1; // ---BBB--
+        t2[l+3][c+2]=1;
+        t2[l+3][c+3]=1;
         break;
     }
     case 2:
     {
-        t2[l+1][c+1]=2; // ---B----
-        t2[l+2][c+1]=2; // ---BBB--
-        t2[l+2][c+2]=2; // ---B----
-        t2[l+2][c+3]=2;
-        t2[l+3][c+1]=2;
+        t2[l+1][c+1]=1; // ---B----
+        t2[l+2][c+1]=1; // ---BBB--
+        t2[l+2][c+2]=1; // ---B----
+        t2[l+2][c+3]=1;
+        t2[l+3][c+1]=1;
         break;
     }
     case 3:
     {
-        t2[l+1][c+1]=2; // ---BBB---
-        t2[l+1][c+2]=2; // ----B----
-        t2[l+1][c+3]=2; // ----B----
-        t2[l+2][c+2]=2;
-        t2[l+3][c+2]=2;
+        t2[l+1][c+1]=1; // ---BBB---
+        t2[l+1][c+2]=1; // ----B----
+        t2[l+1][c+3]=1; // ----B----
+        t2[l+2][c+2]=1;
+        t2[l+3][c+2]=1;
         break;
     }
     case 4:
     {
-        t2[l+2][c+1]=2; // -----B---
-        t2[l+2][c+2]=2; // ---BBB---
-        t2[l+1][c+3]=2; // -----B---
-        t2[l+2][c+3]=2;
-        t2[l+3][c+3]=2;
+        t2[l+2][c+1]=1; // -----B---
+        t2[l+2][c+2]=1; // ---BBB---
+        t2[l+1][c+3]=1; // -----B---
+        t2[l+2][c+3]=1;
+        t2[l+3][c+3]=1;
         break;
     }
     }
@@ -122,9 +125,9 @@ void barcos(int t2[][11])
             if(hv==1)
             {
                 if(c<=4)
-                    c=rand()%4+4;
+                    c=rand()%5+5;
                 else
-                    c=rand()%8;
+                    c=rand()%9;
                 switch (rnavios){
                     case 0:{
                         l=rand()%5;
@@ -138,26 +141,26 @@ void barcos(int t2[][11])
                     case 3:{
                         l=rand()%9;
                         break;}
-                    }
+                }
                         for(l1=l; l1<=l+i1; l1++)
-                    {
-                        for(c1=c; c1<=c+2; c1++)
                         {
-                            if(t2[l1][c1]!=0)
+                            for(c1=c; c1<=c+2; c1++)
                             {
-                                l1=10;
-                                c1=10;
-                                cont=1;
+                                if(t2[l1][c1]!=0)
+                                {
+                                    l1=22;
+                                    c1=22;
+                                    cont=1;
+                                }
                             }
                         }
-                    }
             }
             if(hv==2)
             {
                 if(l<=4)
-                    l=rand()%4+4;
+                    l=rand()%5+5;
                 else
-                    l=rand()%8;
+                    l=rand()%9;
                 switch (rnavios){
                     case 0:{
                         c=rand()%5;
@@ -178,8 +181,8 @@ void barcos(int t2[][11])
                     {
                         if(t2[l1][c1]!=0)
                         {
-                            l1=10;
-                            c1=10;
+                            l1=22;
+                            c1=22;
                             cont=1;
                         }
                 }
@@ -208,32 +211,31 @@ void barcos(int t2[][11])
             case 1:{
                 if(hv==1)      //barco de 3
                 {
-                    t2[l+1][c+1]=2;
-                    t2[l+2][c+1]=2;
-                    t2[l+3][c+1]=2;
+                    t2[l+1][c+1]=3;
+                    t2[l+2][c+1]=3;
+                    t2[l+3][c+1]=3;
                 }else{
-                    t2[l+1][c+1]=2;
-                    t2[l+1][c+2]=2;
-                    t2[l+1][c+3]=2;
+                    t2[l+1][c+1]=3;
+                    t2[l+1][c+2]=3;
+                    t2[l+1][c+3]=3;
                 }
                  break;}
             case 2:if(hv==1)          //barco de 2
                 {
-                    t2[l+1][c+1]=2;
-                    t2[l+2][c+1]=2;
+                    t2[l+1][c+1]=4;
+                    t2[l+2][c+1]=4;
                 }else{
-                    t2[l+1][c+1]=2;
-                    t2[l+1][c+2]=2;
+                    t2[l+1][c+1]=4;
+                    t2[l+1][c+2]=4;
                 }
                 break;
             case 3: if(hv==1){
-                        t2[l+1][c+1]=2;  // barco de 1
+                        t2[l+1][c+1]=5;  // barco de 1
                     }
                 break;
         }
         b[rnavios]-=1;
         cont=0;
-        printf("b[%d] = %d\n",rnavios,b[rnavios]);
 
 
 }
@@ -253,14 +255,17 @@ void dtabuleiro(int t1[][11])
         for(c=1; c<=10; c++)
         {
             //textcolor(9); // poem a cor do texto em azul claro
-            if(t1[l][c]==0)
+            if(t1[l][c]>=0)
             {
                 printf("   ~");
             }
            // textcolor(8);
-            if(t1[l][c]==2)
+            if(t1[l][c]==-1)
             {
                 printf("   #");
+            }
+            if(t1[l][c]==-2){
+                printf("   ^");
             }
         }
        // textcolor(15); // poem a cor do texto em branco brilhante
@@ -277,13 +282,16 @@ int main ()
 {
 
     int coordenadas[11][11];
+    int bar=25;
     srand(time(NULL));
     printf("\n");
     tabuleiro(coordenadas);
     barcos(coordenadas);
-//random(coordenadas);
     dtabuleiro(coordenadas);
-
+    do{
+    tiro(coordenadas,&bar);
+    dtabuleiro(coordenadas);
+    }while(bar>0);
 
     return 0;
 }
