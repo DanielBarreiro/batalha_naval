@@ -1,6 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include <conio.c>
+//#include <conio.c>
 #include <time.h>
 
 
@@ -50,7 +50,7 @@ void random(int a[][11])
 void barcos(int t2[][11])
 {
 
-    int b[3];
+    int b[4];
     int c,l,d,hv,c1,l1,cont=0,rnavios=0,i=0,i1=5;
     b[0]=1;
     b[1]=2;
@@ -146,18 +146,9 @@ void barcos(int t2[][11])
                             c1=10;
                             cont=1;
                         }
-                       /* if(t2[l1][c1]==0)
-                        {
-                            cont++;
-                            //printf("cont v= %d\n",cont);
-                        }*/
                     }
                 }
-              //  printf("cont v= %d\n",cont);
-              /*  if(cont!=18-i)
-            {
-                cont=0;
-            }*/
+
             }
             if(hv==2)
             {
@@ -189,22 +180,8 @@ void barcos(int t2[][11])
                             c1=10;
                             cont=1;
                         }
-                        /*if(t2[l1][c1]==0)
-                        {
-                            cont++;
-                            //printf("cont h= %d\n",cont);
-
-                    }*/
                 }
             }
-           /* printf("cont h= %d\n",cont);
-            printf("c= %d\n",c+1);
-            printf("l= %d\n",l+1);
-            printf("i= %d   i1= %d\n",i,i1);
-            if(cont!=18-i)
-            {
-                cont=0;
-            }*/
             }
 
         }while(cont!=0);
@@ -247,12 +224,14 @@ void barcos(int t2[][11])
                     t2[l+1][c+2]=2;
                 }
                 break;
-            case 3://t2[l+1][c+1]=2;  // barco de 1
+            case 3: if(hv==1 || hv== 2){
+                    t2[l+1][c+1]=2;  // barco de 1
+                    }
                 break;
         }
         b[rnavios]-=1;
         cont=0;
-       // printf("b[%d]= %d\n",rnavios,b[rnavios]);
+        printf("b[%d] = %d\n",rnavios,b[rnavios]);
        }
 
 }
@@ -262,7 +241,7 @@ void dtabuleiro(int t1[][11])
 
     int c,l,n=1;
 
-    textcolor(15); // poem a cor do texto em branco brilhante
+   // textcolor(15); // poem a cor do texto em branco brilhante
     printf("      -------------------------------------------\n");
     for(l=0; l<10; l++)
     {
@@ -270,25 +249,25 @@ void dtabuleiro(int t1[][11])
         printf("  %2.d |",n);
         for(c=0; c<10; c++)
         {
-            textcolor(9); // poem a cor do texto em azul claro
+            //textcolor(9); // poem a cor do texto em azul claro
             if(t1[l][c]==0)
             {
                 printf("   ~");
             }
-            textcolor(8);
+           // textcolor(8);
             if(t1[l][c]==2)
             {
                 printf("   #");
             }
         }
-        textcolor(15); // poem a cor do texto em branco brilhante
+       // textcolor(15); // poem a cor do texto em branco brilhante
         printf("   |");
-        printf("\n");
+                printf("\n");
         n++;
     }
     printf("      -------------------------------------------\n");
     printf("         A   B   C   D   E   F   G   H   I   J   \n");
-    textcolor(7); // poem a cor do texto em branco
+   // textcolor(7); // poem a cor do texto em branco
 
 }
 int main ()
@@ -305,4 +284,3 @@ int main ()
 
     return 0;
 }
-
