@@ -1,1 +1,23 @@
-// Função Tiro
+void tiro(int a[][11],int *barcos1)
+{
+
+    int c,c1;
+    do{
+    printf("Insira a linha (1-10)\n");
+    scanf("%d",&c);
+    printf("Insira a coluna (1-10)\n");
+    scanf("%d",&c1);
+    }while(c<1 || c>10 || c1<1 || c1>10);
+    if(a[c][c1]>0){
+        printf("Acertou em um navio!\n");
+        a[c][c1]=-1;
+        *barcos1-=1;
+    }
+    if(a[c][c1]==0 || a[c][c1]==-2){
+        printf("Acertou na agua\n");
+        a[c][c1]=-2;
+    }
+    if(a[c][c1]==-1){
+        printf("Ja introduziu esta coordenada\n");
+    }
+}
