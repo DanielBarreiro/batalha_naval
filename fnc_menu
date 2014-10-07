@@ -2,26 +2,74 @@
 // para introduzir uma opcao, caso o utilizador introduza um opcao invalida a funcao ira mostrar a mensagem "Opcão Inválida
 // e repetir o menu.
 
-void fnc_menu(void) {
-    system("cls");
-    int opcao;
-    do {
-        printf("      -------------------------------------------\n");
-        printf("\t\t\tEscolha um opcao\n\n");
-        printf("\t\t\t1 - Comecar Jogo\n\t\t\t2 - Intrucoes\n\t\t\t3 - Leaderboard\n\t\t\t0 - Sair\n");
-        printf("      -------------------------------------------\n\n");
+void fnc_menu(void){
+
+int opcao;
+    do{
+        system("cls");
+        printf("\n\n\n\n\n");
+        printf("          -------------------------------------------------------------\n");
+        printf("          |        .___  ___.  _______ .__   __.  __    __            |\n");
+        printf("          |        |   \\/   | |   ____||  \\ |  | |  |  |  |           |\n");
+        printf("          |        |  \\  /  | |  |__   |   \\|  | |  |  |  |           |\n");
+        printf("          |        |  |\\/|  | |   __|  |  . `  | |  |  |  |           |\n");
+        printf("          |        |  |  |  | |  |____ |  |\\   | |  `--'  |           |\n");
+        printf("          |        |__|  |__| |_______||__| \\__|  \\______/            |\n");
+        printf("          -------------------------------------------------------------\n");
+        printf("          |                                                           |\n");
+        printf("          |                    1 - Comecar Jogo                       |\n");
+        printf("          |                    2 - Intrucoes                          |\n");
+        printf("          |                    3 - Leaderboard                        |\n");
+        printf("          |                    0 - Sair                               |\n");
+        printf("          |                                                           |\n");
+        printf("          -------------------------------------------------------------\n");
         scanf("\t\t\t%d",&opcao);
         fflush(stdin);
-        if(opcao <0 || opcao>3) {
-            printf("\n\n\t\t\tOpcao Invalida!");
+        if(opcao <0 || opcao>3)
+        {
+            printf("                         -----------------------------                    \n");
+            printf("                         |       Opcao Invalida!     |                    \n");
+            printf("                         -----------------------------                    \n");
             Sleep(1000);
             system("cls");
         }
-    } while (opcao<0 || opcao>3);
-    switch(opcao) {
-        case 1: {break;}
-        case 2: {fnc_intrucoes(); break;}
-        case 3: {break;}
-        default: {break;}
+    switch(opcao)
+    {
+    case 0:
+    {
+        exit(EXIT_SUCCESS);;
+        break;
     }
+    case 1:
+    {
+        int navios=25;
+        fnc_barcos(coordenadas);
+        do {
+            system("cls");
+            fnc_verificarBarcos(vnavios);
+            fnc_tabuleiro(vnavios);
+            fnc_tiro(&navios);
+        } while (navios>0);
+        printf("\nJogadas: %d\n",jogadas);
+        fnc_leaderboard();
+        jogadas=0;
+        break;
+    }
+    case 2:
+    {
+        fnc_intrucoes();
+        break;
+    }
+    case 3:
+    {
+        fnc_leaderboard();
+        break;
+    }
+    default:
+    {
+        break;
+    }
+    }
+    }while (opcao!=0);
+
 }
