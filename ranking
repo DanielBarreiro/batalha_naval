@@ -1,21 +1,26 @@
-void fnc_leaderboard()   // modo é o nome da operação que a função vai efetuar, escrever ou ler
+void fnc_leaderboard()   // função para criar e mostrar o ranking
 {
 
-    ranking score[11];
     int cont,n2=0,ceof=0,n1=1;
+//cont- contador usado nos ciclos for, n2- indice da variavel de estrutura ranking, ceof- variavel usada para contar o numero de linhas existentes no ficheiro
+// n1- variavel usada para mostrar a posição no ranking, de 1 a 10
     char ch[DIM];
+//ch- variavel que vai ler todas as linhas do ficheiro ate chegar ao NULL
     FILE *ficheiro;
+//ficheiro- apontador usado manusear o ficheiro txt
 
-    ficheiro= fopen("ranking.txt","r");
+    ficheiro= fopen("ranking.txt","r"); //abre o ficheiro txt no modo read
     system("cls");
     if(ficheiro==NULL)
     {
+//cria um novo ficheiro se ele não existe
         ficheiro=fopen("ranking.txt","w+");
         fclose(ficheiro);
         ficheiro=fopen("ranking.txt","r");
     }
-    fseek(ficheiro,0,SEEK_SET);
+    fseek(ficheiro,0,SEEK_SET);//poem o apontador no inicio do ficheiro
     if(jogadas>24){
+//insere um novo valor no ranking se o utilizador tiver acabado o jogo
         printf("Insira o nome para o ranking (Nao pode conter espacos)\n");
         gets(score[n2].nome);
         score[n2].rank=jogadas;
@@ -24,39 +29,48 @@ void fnc_leaderboard()   // modo é o nome da operação que a função vai efet
         system("cls");
     }
     while((fgets(ch,DIM,ficheiro)) != NULL)
+//ciclo que percorre todas as linhas do ficheiro ate ser NULL e incrementa a variavel ceof
     {
         ceof++;
     }
-    fclose(ficheiro);
-    ficheiro=fopen("ranking.txt","r");
+    fclose(ficheiro); //fecha o ficheiro
+    ficheiro=fopen("ranking.txt","r"); //abre o ficheiro txt no modo de leitura
+//o proximo if vai servir para diferenciar se o ranking é chamado depois do jogo ou no menu
     if(n2==0){
+//o n2 é igual a 0 se o utilizador nao tiver jogado, mostra apenas os valores presentes no ficheiro
         while(n2<ceof){
+//ciclo que vai atribuir os valores presentes no ficheiro a variavel score
             fscanf(ficheiro,"%s%d",score[n2].nome,&score[n2].rank);
             fflush(stdin);
             n2++;
     }
     }else{
+//se não for igual a 0 é porque existe um valor que não pertence ao ficheiro
         while(n2<=ceof){
+//ciclo que vai atribuir os valores presentes no ficheiro a variavel score
             fscanf(ficheiro,"%s%d",score[n2].nome,&score[n2].rank);
             fflush(stdin);
             n2++;
     }
     }
-    fclose(ficheiro);
-    ficheiro=fopen("ranking.txt","w+");
+    fclose(ficheiro); //fecha o ficheiro
+    ficheiro=fopen("ranking.txt","w+"); //abre o ficheiro txt no modo de escrita e leitura, apagando os valores anteriormente presentes
     printf("\n");
     if(n2>1){
+//verifica se existe mais que um valor para o ranking
     quick_sort(score,0,n2-1);
     }
     if(n2>10){
+//obriga o n2 a ser igual a 10 no caso de este ser superior, isto vai fazer com que apenas os 10 melhores scores sejam postos no ficheiro
         n2=10;
     }
     for(cont=0; cont<n2; cont++)
     {
+//insere todos os valores de n2 no ficheiro
         fprintf(ficheiro,"%s  %d\n",score[cont].nome,score[cont].rank);
         fflush(stdin);
     }
-
+//as seguintes instruções fazem print ao ranking, com os respectivos valores
     printf("\t\t =======================================\n");
     printf("\t\t|               Ranking                 |\n");
     printf("\t\t =======================================\n");
