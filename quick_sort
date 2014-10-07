@@ -1,0 +1,37 @@
+void quick_sort(ranking arr[],int low,int high)
+{
+    ranking temp;
+    int pivot,j,i;
+    if(low<high)
+    {
+        pivot = low;
+        i = low;
+        j = high;
+
+        while(i<j)
+        {
+            while((arr[i].rank<=arr[pivot].rank)&&(i<high))
+            {
+                i++;
+            }
+
+            while(arr[j].rank>arr[pivot].rank)
+            {
+                j--;
+            }
+
+            if(i<j)
+            {
+                temp=arr[i];
+                arr[i]=arr[j];
+                arr[j]=temp;
+            }
+        }
+
+        temp=arr[pivot];
+        arr[pivot]=arr[j];
+        arr[j]=temp;
+        quick_sort(arr,low,j-1);
+        quick_sort(arr,j+1,high);
+    }
+}
