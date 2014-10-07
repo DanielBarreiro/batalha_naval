@@ -23,6 +23,7 @@ void fnc_menu();
 void fnc_tabuleiro();
 void fnc_verificarBarcos();
 void fnc_intrucoes();
+void fnc_final ();
 
 void quick_sort(ranking arr[],int low,int high) // funcao para ordenar o ranking do menor valor para o maior
 {
@@ -464,6 +465,7 @@ void fnc_leaderboard()   // função para criar e mostrar o ranking
     fseek(ficheiro,0,SEEK_SET);//poem o apontador no inicio do ficheiro
     if(jogadas>24){
 //insere um novo valor no ranking se o utilizador tiver acabado o jogo
+        fnc_final (); //chama o intro final
         printf("Insira o nome para o ranking (Nao pode conter espacos)\n");
         gets(score[n2].nome);
         score[n2].rank=jogadas;
@@ -579,7 +581,7 @@ void fnc_tabuleiro() //função para desenhar o tabuleiro
     printf("      -------------------------------------------        Navios Restantes:\n");
     for(l=1; l<=10; l++)
     {
-//ciclo que percorre todas as posições do tabuleiro 
+//ciclo que percorre todas as posições do tabuleiro
         printf("  %2.d |",n);
         for(c=1; c<=10; c++)
         {
@@ -616,10 +618,12 @@ void fnc_tabuleiro() //função para desenhar o tabuleiro
     printf("         A   B   C   D   E   F   G   H   I   J   \n");
     textcolor(7); // poem a cor do texto em branco
 }
-void fnc_menu(void){
+void fnc_menu(void){ //função para monstrar o menu
 
 int opcao;
+//opcao- variavel que vai armazenar a opção escolhida
     do{
+//do...while para repetir o menu ate ser inserido o numero 0
         system("cls");
         printf("\n\n\n\n\n");
         printf("          -------------------------------------------------------------\n");
@@ -641,41 +645,44 @@ int opcao;
         fflush(stdin);
         if(opcao <0 || opcao>3)
         {
+//se a opção é inferior a 0 ou superior a 3 monstra uma mensagem de erro
             printf("                         -----------------------------                    \n");
             printf("                         |       Opcao Invalida!     |                    \n");
             printf("                         -----------------------------                    \n");
             Sleep(1000);
-            system("cls");
+            system("cls"); // limpa o ecra
         }
     switch(opcao)
     {
     case 0:
     {
-        exit(EXIT_SUCCESS);;
+        exit(EXIT_SUCCESS); //sai do programa
         break;
     }
     case 1:
     {
         int navios=25;
-        fnc_barcos(coordenadas);
+//navios- armazena o total de navios que faltam ser destruidos
+        fnc_barcos(coordenadas); //chama a função que gera os barcos
         do {
-            system("cls");
-            fnc_verificarBarcos(vnavios);
-            fnc_tabuleiro(vnavios);
-            fnc_tiro(&navios);
+//ciclo que repete enquanto nao tiverem sido destruidos todos os navios
+            system("cls"); // limpa o ecra
+            fnc_verificarBarcos(vnavios); //chama a função que verifica os barcos que ainda nao foram destruidos
+            fnc_tabuleiro(vnavios); // chama a função que desenha o tabuleiro
+            fnc_tiro(&navios); //chama a função que verifica onde as coordenadas introduzidas acertam
         } while (navios>0);
-        fnc_leaderboard();
-        jogadas=0;
+        fnc_leaderboard(); //chama a função que cria e mostra o ranking
+        jogadas=0; //faz reset a variavel jogadas, permitindo assim o utilizador jogar novamente
         break;
     }
     case 2:
     {
-        fnc_intrucoes();
+        fnc_intrucoes(); //chama a função que mostra as intruções
         break;
     }
     case 3:
     {
-        fnc_leaderboard();
+        fnc_leaderboard();// chama a função que cria e mostra o ranking
         break;
     }
     default:
@@ -687,23 +694,48 @@ int opcao;
 
 }
 
-void fnc_intrucoes(){ //função para mostrar as intruções usando prints
+void fnc_final () //função para mostrar o final usando prints
+{
+    printf("                _____                        _____                 \n");
+    printf("               |  __ \\                      |  _  |               \n");
+    printf("               | |  \\/ __ _ _ __ ___   ___  | | | |_   _____ _ __  \n");
+    printf("               | | __ / _` | '_ ` _ \\ / _ \\ | | | \\ \\ / / _ \\ '__|\n");
+    printf("               | |_\\ \\ (_| | | | | | |  __/ \\ \\_/ /\\ V /  __/ |   \n");
+    printf("                \\____/\\__,_|_| |_| |_|\\___|  \\___/  \\_/ \\___|_|\n\n");
+}
 
-        system("cls");
-        printf("--------------------------------------------------------------------------------\n");
-        printf("O adversario ira colocar 5 barcos aleatoriamente\n\n");
-        printf("Os barcos nao podem estar juntos!\n\n");
-        printf("A cada jogada o utilizador introduz uma coordenada e o computador verifica-a\n\n");
-        printf("Caso acerte o computador ira revelar a coordenada com um '#'\n\n");
-        printf("Caso falhe o computador ira mudar a cor da posicao\n\n");
-        printf("O jogo acaba quando todos os barcos forem destruidos\n\n");
-        printf("--------------------------------------------------------------------------------\n");
-        system("PAUSE");
-        fnc_menu();
+void fnc_intrucoes(void) //funçao para mostrar as intruções usando printfs
+{
+    system("cls");
+    printf("--------------------------------------------------------------------------------");
+    printf("|      O programa ira gerar as posicoes de 11 barcos aleatoriamente            |");
+    printf("|  Os barco gerados nao estarao juntos, tendo pelo menos uma casa entre eles   |");
+    printf("|               Poderam estar na vertical ou na horizontal                     |");
+    printf("|                       Existem 5 tipos de barcos:                             |");
+    printf("|    _                  _               _                 _             _      |");
+    printf("|   |_|_ _             |_|             |_|               |_|           |_|     |");
+    printf("|   |_|_|_|            |_|             |_|               |_|                   |");
+    printf("|   |_|                |_|             |_|                                     |");
+    printf("|                      |_|                                                     |");
+    printf("|                                                                              |");
+    printf("| 1-Porta Avioes   1-Barco de 4   2-Barcos de 3   3-Barcos de 2   4-Barcos de 1|");
+    printf("|                                                                              |");
+    printf("|               Ao comecar o jogo sera apresentado um tabuleiro                |");
+    printf("|          O jogador deve inserir uma linha (1-10) e uma coluna (A-J)          |");
+    printf("|    O tabuleiro ira mudar os carateres consoante a coordenada introduzida:    |");
+    printf("|                                                                              |");
+    printf("|                                 [");textcolor(9); printf("~"); textcolor(7); printf("] - Agua"); printf("                                   |");
+    printf("|                                 [");textcolor(11); printf("^"); textcolor(7); printf("] - Tiro Falhado"); printf("                           |");
+    printf("|                                 [");textcolor(7); printf("#"); textcolor(7); printf("] - Navio Atingido"); printf("                         |");
+    printf("|                                                                              |");
+    printf("|            O jogo termina quando os 11 barcos forem destruidos               |");
+    printf("--------------------------------------------------------------------------------\n");
+    system("PAUSE");
+    fnc_menu();
 }
 int main ()
 {
     fnc_intro(); //chama a função intro
-    fnc_menu; //chama a função menu
+    fnc_menu(); //chama a função menu
     return 0;
 }
