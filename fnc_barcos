@@ -1,24 +1,30 @@
-// Código para gerar os 11 barcos, 1 - Porta Avioes (T-5), 1 - Barco de 4, 2 - Barcos de 3, 3 - Barcos de 2, 4 - Barcos de 1
-void fnc_barcos(int t2[][11])
+void fnc_barcos(int t2[][11]) //função para gerar os barcos
 {
-    int b[4];
-    int c,l,d,hv,c1,l1,cont=0,rnavios=0,i=0,i1=5,b_3=0,b_2=0;
+    int b[4]; //variavel que conta o numero dos navios que faltam gerar
+    int c,l,d,hv,c1,l1,cont=0,rnavios=0,i1=5,b_3=0,b_2=0;
+//c - valor random da coluna, l- valor random da linha, d- direção do porta-avioes, c1- usado no ciclo para percorrer a tabela, equivale a coluna
+//l1- usado no ciclo para percorrer a tabela, equivale a linha, cont- usado para sair do ciclo do...while, rnavios- variavel usada como indice de b[4]
+//i1- variavel utilizada para diminuir o limite da caixa onde são inseridos os navios
+//b_3- variavel usada para mudar o valor do barco de 3, de 3 para 4, b_2- variavel usada para mudar o valor do barco de 2, de 5 para 7
+//hv-  valor random, entre 1 e 2, que vai determinar se os navios sao colocados horizontal ou verticalmente
     for(l=0; l<=10; l++)
+//percorre o array multidimensional todo, inicializando todas as posições a 0
     {
         for(c=0; c<=10; c++)
         {
             coordenadas[l][c]=0;
         }
     }
-    b[0]=1;
-    b[1]=2;
-    b[2]=3;
-    b[3]=4;
+    b[0]=1;// navio de 4
+    b[1]=2;// navios de 3
+    b[2]=3; //navios de 2
+    b[3]=4; //navios de 1
     d=rand()%4+1; //o d vai mudar a diracção do navio
     c=rand()%6; //Coordenada para o porta-avioes
     l=rand()%6; // tem de ser inferior a 6 senao pode sair fora do tabuleiro
     switch (d)
     {
+//vai inserir o porta-aviões tende em conta a direção
     case 1:
     {
         coordenadas[l+1][c+2]=1; // ----B---
@@ -57,30 +63,36 @@ void fnc_barcos(int t2[][11])
     }
     }
     //inserir os navios que faltam
-    while(b[3]>0)
+    while(b[3]>0) //vai inicializar um ciclo enquanto não tiverem sido colocados todos os navios
     {
         if(b[rnavios]<=0)
         {
+//verifica se o valor de b no indice rnavios é igual ou inferior a 0
+//se for incrementa o rnavios, passando para o proximo tipo
+//e diminui a variavel i1, diminuindo a "caixa" onde é possivel colocar um navio
             rnavios++;
             i1--;
-            i+=3;
         }
         do
         {
-            hv=rand()%2+1;
+//o ciclo do...while vai-se repetir ate ser encontrada uma "caixa" com posições livres
+            hv=rand()%2+1; //gera a direção do navio, horizontal ou vertical
             cont=0;
             if(rnavios==3)
             {
+//se estiverem a ser inseridos os navios de 1, força o hv a ser 1
                 hv=1;
             }
             if(hv==1)
             {
+//o proximo if vai forçar o random a gerar numeros afastandos
                 if(c<=4)
                     c=rand()%5+5;
                 else
                     c=rand()%9;
                 switch (rnavios)
                 {
+//o switch vai gerar a posição da linha de acordo com o tipo de navio, tendo em conta que, quanto maior for, menor será o espaço livre
                 case 0:
                 {
                     l=rand()%5;
@@ -104,10 +116,12 @@ void fnc_barcos(int t2[][11])
                 }
                 for(l1=l; l1<=l+i1; l1++)
                 {
+//verifica todas as posições da caixa começando no canto superior esquerdo e acabando no canto inferior direito
                     for(c1=c; c1<=c+2; c1++)
                     {
                         if(coordenadas[l1][c1]!=0)
                         {
+//as seguintes intruções forçam o ciclo a terminar assim que encontrar um navio
                             l1=22;
                             c1=22;
                             cont=1;
@@ -117,12 +131,14 @@ void fnc_barcos(int t2[][11])
             }
             if(hv==2)
             {
+//o proximo if vai forçar o random a gerar numeros afastandos
                 if(l<=4)
                     l=rand()%5+5;
                 else
                     l=rand()%9;
                 switch (rnavios)
                 {
+//o switch vai gerar a posição da coluna de acordo com o tipo de navio, tendo em conta que, quanto maior for o navio, menor será o espaço livre
                 case 0:
                 {
                     c=rand()%5;
@@ -146,10 +162,12 @@ void fnc_barcos(int t2[][11])
                 }
                 for(l1=l; l1<=l+2; l1++)
                 {
+//verifica todas as posições da caixa começando no canto superior esquerdo e acabando no canto inferior direito
                     for(c1=c; c1<=c+i1; c1++)
                     {
                         if(coordenadas[l1][c1]!=0)
                         {
+//as seguintes intruções forçam o ciclo a terminar assim que encontrar um navio
                             l1=22;
                             c1=22;
                             cont=1;
@@ -161,6 +179,7 @@ void fnc_barcos(int t2[][11])
         while(cont!=0);
         switch(rnavios)
         {
+//o switch vai inserir os navios nas suas posições dentro da "caixa", o tipo de navio vai depender do rnavios
         case 0:
         {
             if (hv==1) //navio de 4
@@ -216,8 +235,7 @@ void fnc_barcos(int t2[][11])
             }
             break;
         }
-        b[rnavios]-=1;
-        cont=0;
+        b[rnavios]-=1; //retira um valor a variavel b no indice rnavios
+        cont=0; //faz reset ao contador
     }
 }
-
