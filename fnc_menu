@@ -2,10 +2,12 @@
 // para introduzir uma opcao, caso o utilizador introduza um opcao invalida a funcao ira mostrar a mensagem "Opcão Inválida
 // e repetir o menu.
 
-void fnc_menu(void){
+void fnc_menu(void){ //função para monstrar o menu
 
 int opcao;
+//opcao- variavel que vai armazenar a opção escolhida
     do{
+//do...while para repetir o menu ate ser inserido o numero 0
         system("cls");
         printf("\n\n\n\n\n");
         printf("          -------------------------------------------------------------\n");
@@ -27,42 +29,44 @@ int opcao;
         fflush(stdin);
         if(opcao <0 || opcao>3)
         {
+//se a opção é inferior a 0 ou superior a 3 monstra uma mensagem de erro
             printf("                         -----------------------------                    \n");
             printf("                         |       Opcao Invalida!     |                    \n");
             printf("                         -----------------------------                    \n");
             Sleep(1000);
-            system("cls");
+            system("cls"); // limpa o ecra
         }
     switch(opcao)
     {
     case 0:
     {
-        exit(EXIT_SUCCESS);;
+        exit(EXIT_SUCCESS); //sai do programa
         break;
     }
     case 1:
     {
         int navios=25;
-        fnc_barcos(coordenadas);
+//navios- armazena o total de navios que faltam ser destruidos
+        fnc_barcos(coordenadas); //chama a função que gera os barcos
         do {
-            system("cls");
-            fnc_verificarBarcos(vnavios);
-            fnc_tabuleiro(vnavios);
-            fnc_tiro(&navios);
+//ciclo que repete enquanto nao tiverem sido destruidos todos os navios
+            system("cls"); // limpa o ecra
+            fnc_verificarBarcos(vnavios); //chama a função que verifica os barcos que ainda nao foram destruidos
+            fnc_tabuleiro(vnavios); // chama a função que desenha o tabuleiro
+            fnc_tiro(&navios); //chama a função que verifica onde as coordenadas introduzidas acertam
         } while (navios>0);
-        printf("\nJogadas: %d\n",jogadas);
-        fnc_leaderboard();
-        jogadas=0;
+        fnc_leaderboard(); //chama a função que cria e mostra o ranking
+        jogadas=0; //faz reset a variavel jogadas, permitindo assim o utilizador jogar novamente
         break;
     }
     case 2:
     {
-        fnc_intrucoes();
+        fnc_intrucoes(); //chama a função que mostra as intruções
         break;
     }
     case 3:
     {
-        fnc_leaderboard();
+        fnc_leaderboard();// chama a função que cria e mostra o ranking
         break;
     }
     default:
@@ -73,3 +77,4 @@ int opcao;
     }while (opcao!=0);
 
 }
+
