@@ -1,23 +1,58 @@
-void tiro(int a[][11],int *barcos1)
+void fnc_tiro(int *barcos1,int *tiros)
 {
-
     int c,c1;
-    do{
-    printf("Insira a linha (1-10)\n");
-    scanf("%d",&c);
-    printf("Insira a coluna (1-10)\n");
-    scanf("%d",&c1);
-    }while(c<1 || c>10 || c1<1 || c1>10);
-    if(a[c][c1]>0){
-        printf("Acertou em um navio!\n");
-        a[c][c1]=-1;
-        *barcos1-=1;
+    char ch1;
+    do
+    {
+        printf("Insira a linha (1-10)\n");
+        scanf("%d",&c);
+        fflush(stdin);
+        printf("Insira a coluna (A-J)\n");
+        scanf("%c",&ch1);
+        fflush(stdin);
+        switch(ch1){
+
+        case 'a':
+        case 'A': c1=1; break;
+        case 'b':
+        case 'B': c1=2; break;
+        case 'C':
+        case 'c': c1=3; break;
+        case 'D':
+        case 'd': c1=4; break;
+        case 'e':
+        case 'E': c1=5; break;
+        case 'F':
+        case 'f': c1=6; break;
+        case 'g':
+        case 'G': c1=7; break;
+        case 'H':
+        case 'h': c1=8; break;
+        case 'i':
+        case 'I': c1=9; break;
+        case 'j':
+        case 'J': c1=10; break;
     }
-    if(a[c][c1]==0 || a[c][c1]==-2){
-        printf("Acertou na agua\n");
-        a[c][c1]=-2;
     }
-    if(a[c][c1]==-1){
+    while(c<1 || c>10 || c1<1 || c1>10);
+
+     if(coordenadas[c][c1]==-1)
+    {
         printf("Ja introduziu esta coordenada\n");
+        Sleep(1000);
     }
+    if(coordenadas[c][c1]>0)
+    {
+        printf("Acertou em um navio!\n");
+        coordenadas[c][c1]=-1;
+        *barcos1-=1;
+        Sleep(1000);
+    }
+    if(coordenadas[c][c1]==0 || coordenadas[c][c1]==-2)
+    {
+        printf("Acertou na agua\n");
+        coordenadas[c][c1]=-2;
+        Sleep(1000);
+    }
+    *tiros+=1;
 }
