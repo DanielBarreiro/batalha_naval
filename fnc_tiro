@@ -1,7 +1,7 @@
-void fnc_tiro(int *barcos1)
+void fnc_tiro(int *barcos1) //função para verificar onde as coordenadas introduzidas acertam
 {
-    int c,c1;
-    char ch1;
+    int c,c1; //variavel c- armazena o valor inserido referente a linha, c1- armazena a conversao de char para int da variavel ch1
+    char ch1; // ch1 - armazena a letra inserida pelo utilizador que corresponde a coluna
     do
     {
         printf("Insira a linha (1-10)\n");
@@ -10,7 +10,7 @@ void fnc_tiro(int *barcos1)
         printf("Insira a coluna (A-J)\n");
         scanf("%c",&ch1);
         fflush(stdin);
-        switch(ch1){
+        switch(ch1){ // verifica qual a letra introduzida e converte-a para um numero atribuindo-o a variavel c1
 
         case 'a':
         case 'A': c1=1; break;
@@ -34,25 +34,31 @@ void fnc_tiro(int *barcos1)
         case 'J': c1=10; break;
     }
     }
-    while(c<1 || c>10 || c1<1 || c1>10);
+    while(c<1 || c>10 || c1<1 || c1>10); // repete os pedidos ate o utilizador inserir valores entre 1 e 10
 
-     if(coordenadas[c][c1]==-1)
+//valores de coordenadas
+// -1 - acertou no navio
+// 0 - agua
+// -2 - acertou na agua
+// >0 - localizações com navios
+
+     if(coordenadas[c][c1]==-1 || coordenadas[c][c1]==-2) // verifica se o utilizador ja introduzio a coordenada anteriormente
     {
         printf("Ja introduziu esta coordenada\n");
-        Sleep(1000);
+        Sleep(1000); //faz uma pausa de 1 segundo para dar tempo ao utlizador de ler o print
     }
-    if(coordenadas[c][c1]>0)
+    if(coordenadas[c][c1]>0) //verifica se a coordenada introduzida tem um navio
     {
         printf("Acertou em um navio!\n");
-        coordenadas[c][c1]=-1;
-        *barcos1-=1;
-        Sleep(1000);
+        coordenadas[c][c1]=-1; // muda o valor da coordenada para -1
+        *barcos1-=1; // diminui um valor ao total de barcos restantes
+        Sleep(1000); //faz uma pausa de 1 segundo para dar tempo ao utlizador de ler o print
     }
-    if(coordenadas[c][c1]==0 || coordenadas[c][c1]==-2)
+    if(coordenadas[c][c1]==0) //verifica se a coordenada introduzida não tem nada
     {
         printf("Acertou na agua\n");
-        coordenadas[c][c1]=-2;
-        Sleep(1000);
+        coordenadas[c][c1]=-2; //muda o valor da coordenada para -2
+        Sleep(1000);//faz uma pausa de 1 segundo para dar tempo ao utlizador de ler o print
     }
-    jogadas+=1;
+    jogadas+=1; //aumenta o numero total de jogadas
 }
