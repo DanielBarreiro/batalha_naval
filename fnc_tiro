@@ -1,4 +1,4 @@
-void fnc_tiro(int *barcos1,int *tiros)
+void fnc_tiro(int *barcos1)
 {
     int c,c1;
     char ch1;
@@ -54,5 +54,5 @@ void fnc_tiro(int *barcos1,int *tiros)
         coordenadas[c][c1]=-2;
         Sleep(1000);
     }
-    *tiros+=1;
+    jogadas+=1;
 }
