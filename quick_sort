@@ -1,37 +1,46 @@
-void quick_sort(ranking arr[],int low,int high)
+void quick_sort(ranking arr[],int low,int high) // funcao para ordenar o ranking do menor valor para o maior
 {
-    ranking temp;
-    int pivot,j,i;
+                                                //recebe as variaveis arr onde estao guardados todos os valores do ranking
+                                                //low- recebe o menor valor possivel , high- recebe o maior valor possivel
+                                                // ambos estes valor sao para ser usados no indice da variavel de estrutura
+
+    ranking temp;   //cria uma variavel de estrutura que vai alojar temporariamente o valor da variavel
+                    // "arr" de modo a efectuar a troca
+    int pivot,j,i; //pivot - indice de referencia para as trocas, j- vai armazenar o valor high, i- vai armazenar o valor low
     if(low<high)
     {
         pivot = low;
         i = low;
         j = high;
 
-        while(i<j)
+        while(i<j) // repete o ciclo enquanto o valor de i for inferior ao valor de j
         {
             while((arr[i].rank<=arr[pivot].rank)&&(i<high))
+//vai encontrar o valor acima do valor do pivot
+
             {
                 i++;
             }
 
             while(arr[j].rank>arr[pivot].rank)
+//vai encontrar o valor abaixo do valor do pivot
             {
                 j--;
             }
 
             if(i<j)
             {
+//vai trocar os valor em i e j de modo a por eles na ordem correcta
                 temp=arr[i];
                 arr[i]=arr[j];
                 arr[j]=temp;
             }
         }
-
+//troca o valor do arr no indice pivot pelo do indice j
         temp=arr[pivot];
         arr[pivot]=arr[j];
         arr[j]=temp;
-        quick_sort(arr,low,j-1);
-        quick_sort(arr,j+1,high);
+        quick_sort(arr,low,j-1);  //recursiva
+        quick_sort(arr,j+1,high); //recursiva
     }
 }
