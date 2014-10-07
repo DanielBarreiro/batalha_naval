@@ -1,23 +1,31 @@
-void fnc_verificarBarcos() {
+void fnc_verificarBarcos() {//função para verificar os navios que restam
 
     int cont_pa=0,cont_b4=0,cont_b1=0,cont_b3_3=0,cont_b3_4=0,cont_b2_5=0,cont_b2_6=0,cont_b2_7=0;
+//variaveis que contam o numero de navios restantes
+//cont_pa - conta o porta-avioes, cont_b4 - conta o barco de 4,cont_b1 - conta os barcos de 1,cont_b3_3 - conta os barcos de 3 que sejam de numero 3
+//cont_b3_4 - conta os barcos de 3 que sejam de numero 4, cont_b2_5/6/7- contam os barcos de 2 com os numeros 5,6 e 7
     int c,l,s2,s3;
+//c - variavel usada para contar as colunas da tabela, l- variavel usada para contar as linhas da tabela
+//se2 - variavel usada para somar todos os barcos de 2, s3- variavel usada para somar todos os barcos de 3
 
+//ciclo que percorre a tabela inteira
     for(l=0;l<=10;l++){
         for(c=0;c<=10;c++){
-            switch(coordenadas[l][c]){
-                case 1: cont_pa++; break;
-                case 2: cont_b4++; break;
-                case 3: cont_b3_3++; break;
-                case 4: cont_b3_4++; break;
-                case 5: cont_b2_5++; break;
-                case 6: cont_b2_6++; break;
-                case 7: cont_b2_7++; break;
-                case 8: cont_b1++; break;
+            switch(coordenadas[l][c]){  // vai ver os valores da tabela nas posiçoes [l][c]
+                                        //cada valor acima de 0 representa um navio
+                case 1: cont_pa++; break; // aumenta o contador do porta-aviões
+                case 2: cont_b4++; break; // aumenta o contador do barco de 4
+                case 3: cont_b3_3++; break; // aumenta o contador dos barcos de 3 com o numero 3
+                case 4: cont_b3_4++; break; // aumenta o contador dos barcos de 3 com o numero 4
+                case 5: cont_b2_5++; break; // aumenta o contador dos barcos de 2 com o numero 5
+                case 6: cont_b2_6++; break; // aumenta o contador dos barcos de 2 com o numero 6
+                case 7: cont_b2_7++; break; // aumenta o contador dos barcos de 2 com o numero 7
+                case 8: cont_b1++; break; // aumenta o contador dos barcos de 1
             }
         }
     }
-    s2=cont_b2_5+cont_b2_6+cont_b2_7;
+
+//os seguintes if's verificam a existencia dos navios correspondentes, se existirem dao o valor 1 a variavel vnavios no indice correspondente
     if(cont_pa>0){
         vnavios[1]=1;
     }
@@ -45,10 +53,11 @@ void fnc_verificarBarcos() {
     if(cont_b2_7>0){
         cont_b2_7=1;
     }
+//os navios de 1 são os unicos sem verificação porque cada vez que são atinjidos destroem um
     vnavios[9]=cont_b1;
-    s2=cont_b2_5+cont_b2_6+cont_b2_7;
-    s3=cont_b3_4+cont_b3_3;
-    vnavios[7]=s2;
-    vnavios[5]=s3;
+    s2=cont_b2_5+cont_b2_6+cont_b2_7; //soma todos os contadores de navios de 2
+    s3=cont_b3_4+cont_b3_3; // soma todos os contadores de navios de 3
+    vnavios[7]=s2; //atribui a variavel vnavios o valor da soma dos navios de 2
+    vnavios[5]=s3; //atribui a variavel vnavios o valor da soma dos navios de 3
 
 }
