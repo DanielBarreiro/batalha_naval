@@ -1,25 +1,57 @@
 // Funcao que escreve o tabuleiro da batalha naval com o eixo y em numeros e o eixo x em letras.
 #include <conio.h>
 
-void fnc_tabuleiro(void)
+void fnc_tabuleiro()
 {
-    int c,l,n=10;
+    int c,l,n=1,nIndice=0;
+    char *nnavios[10];
+    nnavios[0] = "";
+    nnavios[1] = "Porta-Avioes";
+    nnavios[2] = "";
+    nnavios[3] = "Barco 4";
+    nnavios[4] = "";
+    nnavios[5] = "Barco 3";
+    nnavios[6] = "";
+    nnavios[7] = "Barco 2";
+    nnavios[8]  = "";
+    nnavios[9] = "Barco 1";
+
     textcolor(15); // poem a cor do texto em branco brilhante
-    printf("      -------------------------------------------\n");
-    for(l=0; l<10; l++)
+    printf("      -------------------------------------------        Navios Restantes:\n");
+    for(l=1; l<=10; l++)
     {
         printf("  %2.d |",n);
-        for(c=0; c<10; c++)
+        for(c=1; c<=10; c++)
         {
-            textcolor(9); // poem a cor do texto em azul claro
-            printf("   ~");
+            textcolor(9);
+            if(coordenadas[l][c]>=0)
+            {
+                printf("   ~");
+            }
+            textcolor(7);
+            if(coordenadas[l][c]==-1)
+            {
+                printf("   #");
+            }
+            textcolor(11);
+            if(coordenadas[l][c]==-2)
+            {
+                printf("   ^");
+            }
         }
         textcolor(15); // poem a cor do texto em branco brilhante
-        printf("   |");
+        printf("   |          ");
+        if((nIndice==1)||(nIndice==3)||(nIndice==5)||(nIndice==7)||(nIndice==9)){
+                printf("%d ",vnavios[nIndice]);
+        }
+        if(nIndice < 10) {
+            printf("%s",nnavios[nIndice]);
+        }
         printf("\n");
-        n--;
+        nIndice++;
+        n++;
     }
     printf("      -------------------------------------------\n");
     printf("         A   B   C   D   E   F   G   H   I   J   \n");
     textcolor(7); // poem a cor do texto em branco
-
+}
