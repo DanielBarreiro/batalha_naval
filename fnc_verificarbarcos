@@ -1,0 +1,54 @@
+void fnc_verificarBarcos() {
+
+    int cont_pa=0,cont_b4=0,cont_b1=0,cont_b3_3=0,cont_b3_4=0,cont_b2_5=0,cont_b2_6=0,cont_b2_7=0;
+    int c,l,s2,s3;
+
+    for(l=0;l<=10;l++){
+        for(c=0;c<=10;c++){
+            switch(coordenadas[l][c]){
+                case 1: cont_pa++; break;
+                case 2: cont_b4++; break;
+                case 3: cont_b3_3++; break;
+                case 4: cont_b3_4++; break;
+                case 5: cont_b2_5++; break;
+                case 6: cont_b2_6++; break;
+                case 7: cont_b2_7++; break;
+                case 8: cont_b1++; break;
+            }
+        }
+    }
+    s2=cont_b2_5+cont_b2_6+cont_b2_7;
+    if(cont_pa>0){
+        vnavios[1]=1;
+    }
+    else{
+        vnavios[1]=0;
+    }
+    if(cont_b4>0){
+        vnavios[3]=1;
+    }
+    else{
+        vnavios[3]=0;
+    }
+    if(cont_b3_3>0){
+        cont_b3_3=1;
+    }
+    if(cont_b3_4>0){
+        cont_b3_4=1;
+    }
+    if(cont_b2_5>0){
+        cont_b2_5=1;
+    }
+    if(cont_b2_6>0){
+        cont_b2_6=1;
+    }
+    if(cont_b2_7>0){
+        cont_b2_7=1;
+    }
+    vnavios[9]=cont_b1;
+    s2=cont_b2_5+cont_b2_6+cont_b2_7;
+    s3=cont_b3_4+cont_b3_3;
+    vnavios[7]=s2;
+    vnavios[5]=s3;
+
+}
