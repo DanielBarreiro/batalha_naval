@@ -220,3 +220,4 @@ void fnc_barcos(int t2[][11])
         cont=0;
     }
 }
+
