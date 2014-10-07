@@ -5,20 +5,59 @@
 #include <time.h>
 
 #define DIM 50
-#define versao 0.2
-
-int coordenadas[11][11];
-
+#define versao 0.9
 
 typedef struct {
     char nome[DIM];
-    int jogadas;
+    int rank;
 }ranking;
 
-//void fnc_menu(int pos[][11],barco_2 s1[],barco_3 s2[],char vbarcos[]);
+int coordenadas[11][11];
+int vnavios[10],jogadas=0;
+ranking score[11];
+
+void fnc_menu();
 void fnc_tabuleiro(int vbarcos[]);
 void fnc_verificarBarcos(int vbarcos[]);
 void fnc_intrucoes();
+
+void quick_sort(ranking arr[],int low,int high)
+{
+    ranking temp;
+    int pivot,j,i;
+    if(low<high)
+    {
+        pivot = low;
+        i = low;
+        j = high;
+
+        while(i<j)
+        {
+            while((arr[i].rank<=arr[pivot].rank)&&(i<high))
+            {
+                i++;
+            }
+
+            while(arr[j].rank>arr[pivot].rank)
+            {
+                j--;
+            }
+
+            if(i<j)
+            {
+                temp=arr[i];
+                arr[i]=arr[j];
+                arr[j]=temp;
+            }
+        }
+
+        temp=arr[pivot];
+        arr[pivot]=arr[j];
+        arr[j]=temp;
+        quick_sort(arr,low,j-1);
+        quick_sort(arr,j+1,high);
+    }
+}
 
 void fnc_verificarBarcos(int vbarcos[]) {
 
@@ -355,66 +394,83 @@ void fnc_barcos(int t2[][11])
     }
 }
 
-void fnc_leaderboard(char modo)   // modo é o nome da operação que a função vai efetuar, escrever ou ler
+void fnc_leaderboard()   // modo é o nome da operação que a função vai efetuar, escrever ou ler
 {
+
+    ranking score[11];
+    int cont,n2=0,ceof=0,n1=1;
+    char ch[DIM];
+    FILE *ficheiro;
+
+    ficheiro= fopen("ranking.txt","r");
     system("cls");
-    ranking array_ranking[DIM];
-    switch(modo)
+    if(ficheiro==NULL)
     {
-    case 'e':   // modo escrever
-    {
+        ficheiro=fopen("ranking.txt","w+");
+        fclose(ficheiro);
+        ficheiro=fopen("ranking.txt","r");
+    }
+    fseek(ficheiro,0,SEEK_SET);
+    if(jogadas>24){
+        printf("Insira o nome para o ranking (Nao pode conter espacos)\n");
+        gets(score[n2].nome);
+        score[n2].rank=jogadas;
         fflush(stdin);
-        printf("Introduza o nome:\n");
-        gets(array_ranking[0].nome);
-        FILE *prt_fr; //declarar o pointer do ficheiro;
-        prt_fr = fopen("leaderboard.txt","a"); // Abrir o ficheiro no modo "APPEND" (adicionar texto);
-        if(!prt_fr)
-        {
-            printf("ERRO! Ficheiro Invalido!");
-        }
-        else
-        {
-            fprintf(prt_fr,"\n%s - %d\n",array_ranking[0].nome,array_ranking[0].jogadas); // Escrever no Ficheiro (Nome e Nº de Jogadas);
-            fclose(prt_fr); // Fechar ficheiro
-        }
-        break;
+        n2++;
+        system("cls");
     }
-    case 'l':   // modo ler, retira os valores do ficheiro .txt
+    while((fgets(ch,DIM,ficheiro)) != NULL)
     {
-        fflush(stdin);
-        FILE *prt_fr; //declarar o pointer do ficheiro
-        char buf[1000]=""; // buffer para guardar o conteudo do ficheiro .txt
-        prt_fr = fopen("leaderboard.txt","r");
-        if(!prt_fr)
-        {
-            printf("ERRO! Ficheiro Invalido!");
-        }
-        else
-        {
-            while(fgets(buf,1000,prt_fr) != NULL)
-                printf("%s",buf);
-        }
-        break;
+        ceof++;
     }
-    default:   // modo ler mas apenas apresenta a lista.
+    fclose(ficheiro);
+    ficheiro=fopen("ranking.txt","r");
+    if(n2==0){
+        while(n2<ceof){
+            fscanf(ficheiro,"%s%d",score[n2].nome,&score[n2].rank);
+            fflush(stdin);
+            n2++;
+    }
+    }else{
+        while(n2<=ceof){
+            fscanf(ficheiro,"%s%d",score[n2].nome,&score[n2].rank);
+            fflush(stdin);
+            n2++;
+    }
+    }
+    fclose(ficheiro);
+    ficheiro=fopen("ranking.txt","w+");
+    printf("\n");
+    if(n2>1){
+    quick_sort(score,0,n2-1);
+    }
+    if(n2>10){
+        n2=10;
+    }
+    for(cont=0; cont<n2; cont++)
     {
+        fprintf(ficheiro,"%s  %d\n",score[cont].nome,score[cont].rank);
         fflush(stdin);
-        FILE *prt_fr; //declarar o pointer do ficheiro
-        char buf[1000]=""; // buffer para guardar o conteudo do ficheiro .txt
-        prt_fr = fopen("leaderboard.txt","r");
-        if(!prt_fr)
-        {
-            printf("ERRO! Ficheiro Invalido!");
-        }
-        else
-        {
-            while(fgets(buf,1000,prt_fr) != NULL)
-                printf("%s",buf);
-        }
-        system("PAUSE");
     }
+
+    printf("\t\t =======================================\n");
+    printf("\t\t|               Ranking                 |\n");
+    printf("\t\t =======================================\n");
+    printf("\t\t|   Posicao  |   Nome    |    Score     |\n");
+    printf("\t\t =======================================\n");
+    printf("\t\t|                                       |\n");
+
+    for(cont=0; cont<n2; cont++)
+    {
+        printf("\t\t| %2.d Lugar -    %s\t\t%3.d\t|\n",n1,score[cont].nome,score[cont].rank);
+        n1++;
     }
+    printf("\t\t|                                       |\n");
+    printf("\t\t =======================================\n");
+    rewind(ficheiro);
+    fclose(ficheiro);
     system("PAUSE");
+    //fnc_menu();
 }
 
 void fnc_intro(void)
@@ -429,7 +485,6 @@ void fnc_intro(void)
     printf("   \\____/  \\__,_| \\__|\\__,_||_||_| |_| \\__,_| \\_| \\_/ \\__,_|  \\_/  \\__,_||_|  \n\n");
     printf("\t\t\t\t Versao %.1f\n\n",versao);
     printf("\t\t    Feito por: Daniel Barreiro e Fabio Gaspar\n\n");
-    printf("\t\t        Prima uma tecla para comecar...\n\n");
     printf("\t\t\t     .  o ..\n");
     printf("\t\t\t     o . o o.o\n");
     printf("\t\t\t          ...oo\n");
@@ -495,14 +550,9 @@ void fnc_tabuleiro(int vbarcos[])
     printf("         A   B   C   D   E   F   G   H   I   J   \n");
     textcolor(7); // poem a cor do texto em branco
 }
-int main ()
-{
-    //int coordenadas[11][11];
-    int vnavios[10];
-    fnc_intro();
+void fnc_menu(void){
 
-    system("cls");
-    int opcao;
+int opcao;
     do{
         system("cls");
         printf("\n\n\n\n\n");
@@ -540,7 +590,6 @@ int main ()
     }
     case 1:
     {
-        int jogadas=0;
         int navios=25;
         fnc_barcos(coordenadas);
         do {
@@ -550,11 +599,31 @@ int main ()
             fnc_tiro(&navios,&jogadas);
         } while (navios>0);
         printf("\nJogadas: %d\n",jogadas);
-        system("Pause");
+        fnc_leaderboard();
+        jogadas=0;
         break;
     }
     case 2:
     {
+        fnc_intrucoes();
+        break;
+    }
+    case 3:
+    {
+        fnc_leaderboard();
+        break;
+    }
+    default:
+    {
+        break;
+    }
+    }
+    }while (opcao!=0);
+
+}
+
+void fnc_intrucoes(){
+
         system("cls");
         printf("--------------------------------------------------------------------------------\n");
         printf("O adversario ira colocar 5 barcos aleatoriamente\n\n");
@@ -565,21 +634,13 @@ int main ()
         printf("O jogo acaba quando todos os barcos forem destruidos\n\n");
         printf("--------------------------------------------------------------------------------\n");
         system("PAUSE");
-        break;
-    }
-    case 3:
-    {
-        fnc_leaderboard('e');
-        break;
-    }
-    default:
-    {
-        break;
-    }
-    }
-    }while (opcao!=0);
-    system("cls");
-    printf("\n");
+        fnc_menu();
+}
+
+int main ()
+{
+    fnc_intro();
+    fnc_menu();
     return 0;
 }
 
