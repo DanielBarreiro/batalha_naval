@@ -1,7 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <conio.c>
-#include <windows.h>
 #include <time.h>
 
 #define DIM 50
@@ -17,8 +16,8 @@ int vnavios[10],jogadas=0;
 ranking score[11];
 
 void fnc_menu();
-void fnc_tabuleiro(int vbarcos[]);
-void fnc_verificarBarcos(int vbarcos[]);
+void fnc_tabuleiro();
+void fnc_verificarBarcos();
 void fnc_intrucoes();
 
 void quick_sort(ranking arr[],int low,int high)
@@ -59,7 +58,7 @@ void quick_sort(ranking arr[],int low,int high)
     }
 }
 
-void fnc_verificarBarcos(int vbarcos[]) {
+void fnc_verificarBarcos() {
 
     int cont_pa=0,cont_b4=0,cont_b1=0,cont_b3_3=0,cont_b3_4=0,cont_b2_5=0,cont_b2_6=0,cont_b2_7=0;
     int c,l,s2,s3;
@@ -80,16 +79,16 @@ void fnc_verificarBarcos(int vbarcos[]) {
     }
     s2=cont_b2_5+cont_b2_6+cont_b2_7;
     if(cont_pa>0){
-        vbarcos[1]=1;
+        vnavios[1]=1;
     }
     else{
-        vbarcos[1]=0;
+        vnavios[1]=0;
     }
     if(cont_b4>0){
-        vbarcos[3]=1;
+        vnavios[3]=1;
     }
     else{
-        vbarcos[3]=0;
+        vnavios[3]=0;
     }
     if(cont_b3_3>0){
         cont_b3_3=1;
@@ -106,15 +105,15 @@ void fnc_verificarBarcos(int vbarcos[]) {
     if(cont_b2_7>0){
         cont_b2_7=1;
     }
-    vbarcos[9]=cont_b1;
+    vnavios[9]=cont_b1;
     s2=cont_b2_5+cont_b2_6+cont_b2_7;
     s3=cont_b3_4+cont_b3_3;
-    vbarcos[7]=s2;
-    vbarcos[5]=s3;
+    vnavios[7]=s2;
+    vnavios[5]=s3;
 
 }
 
-void fnc_tiro(int *barcos1,int *tiros)
+void fnc_tiro(int *barcos1)
 {
     int c,c1;
     char ch1;
@@ -170,7 +169,7 @@ void fnc_tiro(int *barcos1,int *tiros)
         coordenadas[c][c1]=-2;
         Sleep(1000);
     }
-    *tiros+=1;
+    jogadas+=1;
 }
 void fnc_barcos(int t2[][11])
 {
@@ -470,7 +469,6 @@ void fnc_leaderboard()   // modo é o nome da operação que a função vai efet
     rewind(ficheiro);
     fclose(ficheiro);
     system("PAUSE");
-    //fnc_menu();
 }
 
 void fnc_intro(void)
@@ -496,7 +494,7 @@ void fnc_intro(void)
     printf("--------------------------------------------------------------------------------\n");
     system("PAUSE");
 }
-void fnc_tabuleiro(int vbarcos[])
+void fnc_tabuleiro()
 {
     int c,l,n=1,nIndice=0;
     char *nnavios[10];
@@ -537,7 +535,7 @@ void fnc_tabuleiro(int vbarcos[])
         textcolor(15); // poem a cor do texto em branco brilhante
         printf("   |          ");
         if((nIndice==1)||(nIndice==3)||(nIndice==5)||(nIndice==7)||(nIndice==9)){
-                printf("%d ",vbarcos[nIndice]);
+                printf("%d ",vnavios[nIndice]);
         }
         if(nIndice < 10) {
             printf("%s",nnavios[nIndice]);
@@ -596,9 +594,8 @@ int opcao;
             system("cls");
             fnc_verificarBarcos(vnavios);
             fnc_tabuleiro(vnavios);
-            fnc_tiro(&navios,&jogadas);
+            fnc_tiro(&navios);
         } while (navios>0);
-        printf("\nJogadas: %d\n",jogadas);
         fnc_leaderboard();
         jogadas=0;
         break;
@@ -643,4 +640,3 @@ int main ()
     fnc_menu();
     return 0;
 }
-
