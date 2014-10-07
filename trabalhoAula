@@ -1,64 +1,373 @@
-void barcos(int t2[][11])
-{
+#include <stdio.h>
+#include <stdlib.h>
+#include <conio.c>
+#include <time.h>
 
+#define DIM 50
+#define versao 0.9
+
+typedef struct
+{
+    char nome[DIM];
+    int rank;
+} ranking;
+
+int coordenadas[11][11];
+int vnavios[10],jogadas=0;
+ranking score[11];
+
+void fnc_menu();
+void fnc_tabuleiro();
+void fnc_verificarBarcos();
+void fnc_intrucoes();
+
+void fnc_final ()
+{
+    printf("                _____                        _____                 \n");
+    printf("               |  __ \\                      |  _  |               \n");
+    printf("               | |  \\/ __ _ _ __ ___   ___  | | | |_   _____ _ __  \n");
+    printf("               | | __ / _` | '_ ` _ \\ / _ \\ | | | \\ \\ / / _ \\ '__|\n");
+    printf("               | |_\\ \\ (_| | | | | | |  __/ \\ \\_/ /\\ V /  __/ |   \n");
+    printf("                \\____/\\__,_|_| |_| |_|\\___|  \\___/  \\_/ \\___|_|\n\n");
+}
+
+void quick_sort(ranking arr[],int low,int high)
+{
+    ranking temp;
+    int pivot,j,i;
+    if(low<high)
+    {
+        pivot = low;
+        i = low;
+        j = high;
+        while(i<j)
+        {
+            while((arr[i].rank<=arr[pivot].rank)&&(i<high))
+            {
+                i++;
+            }
+            while(arr[j].rank>arr[pivot].rank)
+            {
+                j--;
+            }
+            if(i<j)
+            {
+                temp=arr[i];
+                arr[i]=arr[j];
+                arr[j]=temp;
+            }
+        }
+        temp=arr[pivot];
+        arr[pivot]=arr[j];
+        arr[j]=temp;
+        quick_sort(arr,low,j-1);
+        quick_sort(arr,j+1,high);
+    }
+}
+
+void fnc_leaderboard() // modo é o nome da operação que a função vai efetuar, escrever ou ler
+{
+    int cont,n2=0,ceof=0,n1=1;
+    char ch[DIM];
+    FILE *ficheiro;
+    ficheiro= fopen("ranking.txt","r");
+    system("cls");
+    if(ficheiro==NULL)
+    {
+        ficheiro=fopen("ranking.txt","w+");
+        fclose(ficheiro);
+        ficheiro=fopen("ranking.txt","r");
+    }
+    fseek(ficheiro,0,SEEK_SET);
+    if(jogadas>24)
+    {
+        fnc_final();
+        printf("\tInsira o nome para o ranking (Nao pode conter espacos)\n");
+        gets(score[n2].nome);
+        score[n2].rank=jogadas;
+        fflush(stdin);
+        n2++;
+        system("cls");
+    }
+    while((fgets(ch,DIM,ficheiro)) != NULL)
+    {
+        ceof++;
+    }
+    fclose(ficheiro);
+    ficheiro=fopen("ranking.txt","r");
+    if(n2==0)
+    {
+        while(n2<ceof)
+        {
+            fscanf(ficheiro,"%s%d",score[n2].nome,&score[n2].rank);
+            fflush(stdin);
+            n2++;
+        }
+    }
+    else
+    {
+        while(n2<=ceof)
+        {
+            fscanf(ficheiro,"%s%d",score[n2].nome,&score[n2].rank);
+            fflush(stdin);
+            n2++;
+        }
+    }
+    fclose(ficheiro);
+    ficheiro=fopen("ranking.txt","w+");
+    printf("\n");
+    if(n2>1)
+    {
+        quick_sort(score,0,n2-1);
+    }
+    if(n2>10)
+    {
+        n2=10;
+    }
+    for(cont=0; cont<n2; cont++)
+    {
+        fprintf(ficheiro,"%s %d\n",score[cont].nome,score[cont].rank);
+        fflush(stdin);
+    }
+    printf("\t\t =======================================\n");
+    printf("\t\t|                Ranking                |\n");
+    printf("\t\t =======================================\n");
+    printf("\t\t|        Posicao | Nome | Score         |\n");
+    printf("\t\t =======================================\n");
+    printf("\t\t|                                       |\n");
+    for(cont=0; cont<n2; cont++)
+    {
+        printf("\t\t| %2.d Lugar - %s\t\t%3.d\t|\n",n1,score[cont].nome,score[cont].rank);
+        n1++;
+    }
+    printf("\t\t|                                       |\n");
+    printf("\t\t =======================================\n");
+    rewind(ficheiro);
+    fclose(ficheiro);
+    system("PAUSE");
+    fnc_menu();
+}
+
+
+void fnc_verificarBarcos()
+{
+    int cont_pa=0,cont_b4=0,cont_b1=0,cont_b3_3=0,cont_b3_4=0,cont_b2_5=0,cont_b2_6=0,cont_b2_7=0;
+    int c,l,s2,s3;
+    for(l=0; l<=10; l++)
+    {
+        for(c=0; c<=10; c++)
+        {
+            switch(coordenadas[l][c])
+            {
+            case 1:
+                cont_pa++;
+                break;
+            case 2:
+                cont_b4++;
+                break;
+            case 3:
+                cont_b3_3++;
+                break;
+            case 4:
+                cont_b3_4++;
+                break;
+            case 5:
+                cont_b2_5++;
+                break;
+            case 6:
+                cont_b2_6++;
+                break;
+            case 7:
+                cont_b2_7++;
+                break;
+            case 8:
+                cont_b1++;
+                break;
+            }
+        }
+    }
+    s2=cont_b2_5+cont_b2_6+cont_b2_7;
+    if(cont_pa>0)
+    {
+        vnavios[1]=1;
+    }
+    else
+    {
+        vnavios[1]=0;
+    }
+    if(cont_b4>0)
+    {
+        vnavios[3]=1;
+    }
+    else
+    {
+        vnavios[3]=0;
+    }
+    if(cont_b3_3>0)
+    {
+        cont_b3_3=1;
+    }
+    if(cont_b3_4>0)
+    {
+        cont_b3_4=1;
+    }
+    if(cont_b2_5>0)
+    {
+        cont_b2_5=1;
+    }
+    if(cont_b2_6>0)
+    {
+        cont_b2_6=1;
+    }
+    if(cont_b2_7>0)
+    {
+        cont_b2_7=1;
+    }
+    vnavios[9]=cont_b1;
+    s2=cont_b2_5+cont_b2_6+cont_b2_7;
+    s3=cont_b3_4+cont_b3_3;
+    vnavios[7]=s2;
+    vnavios[5]=s3;
+}
+void fnc_tiro(int *navios)
+{
+    int c,c1;
+    char ch1;
+    do
+    {
+        printf("Insira a linha (1-10)\n");
+        scanf("%d",&c);
+        fflush(stdin);
+        printf("Insira a coluna (A-J)\n");
+        scanf("%c",&ch1);
+        fflush(stdin);
+        switch(ch1)
+        {
+        case 'a':
+        case 'A':
+            c1=1;
+            break;
+        case 'b':
+        case 'B':
+            c1=2;
+            break;
+        case 'C':
+        case 'c':
+            c1=3;
+            break;
+        case 'D':
+        case 'd':
+            c1=4;
+            break;
+        case 'e':
+        case 'E':
+            c1=5;
+            break;
+        case 'F':
+        case 'f':
+            c1=6;
+            break;
+        case 'g':
+        case 'G':
+            c1=7;
+            break;
+        case 'H':
+        case 'h':
+            c1=8;
+            break;
+        case 'i':
+        case 'I':
+            c1=9;
+            break;
+        case 'j':
+        case 'J':
+            c1=10;
+            break;
+        }
+    }
+    while(c<1 || c>10 || c1<1 || c1>10);
+    if(coordenadas[c][c1]==-1)
+    {
+        printf("Ja introduziu esta coordenada\n");
+        Sleep(1000);
+    }
+    if(coordenadas[c][c1]>0)
+    {
+        printf("Acertou em um navio!\n");
+        coordenadas[c][c1]=-1;
+        *navios-=1;
+        Sleep(1000);
+    }
+    if(coordenadas[c][c1]==0 || coordenadas[c][c1]==-2)
+    {
+        printf("Acertou na agua\n");
+        coordenadas[c][c1]=-2;
+        Sleep(1000);
+    }
+    jogadas+=1;
+}
+void fnc_barcos()
+{
     int b[4];
-    int c,l,d,hv,c1,l1,cont=0,rnavios=0,i=0,i1=5;
+    int c,l,d,hv,c1,l1,cont=0,rnavios=0,i=0,i1=5,contb3=0,contb2=0;
+    for(l=0; l<=10; l++)
+    {
+        for(c=0; c<=10; c++)
+        {
+            coordenadas[l][c]=0;
+        }
+    }
     b[0]=1;
     b[1]=2;
     b[2]=3;
     b[3]=4;
-    d=rand()%4+1;
-//o d vai mudar a diracção do navio
-// funcoes para inserir o porta-avioes
-
-
+    d=rand()%4+1; //o d vai mudar a diracção do navio
     c=rand()%6; //Coordenada para o porta-avioes
     l=rand()%6; // tem de ser inferior a 6 senao pode sair fora do tabuleiro
-
     switch (d)
     {
     case 1:
     {
-        t2[l+1][c+2]=1; // ----B---
-        t2[l+2][c+2]=1; // ----B---
-        t2[l+3][c+1]=1; // ---BBB--
-        t2[l+3][c+2]=1;
-        t2[l+3][c+3]=1;
+        coordenadas[l+1][c+2]=1; // ----B---
+        coordenadas[l+2][c+2]=1; // ----B---
+        coordenadas[l+3][c+1]=1; // ---BBB--
+        coordenadas[l+3][c+2]=1;
+        coordenadas[l+3][c+3]=1;
         break;
     }
     case 2:
     {
-        t2[l+1][c+1]=1; // ---B----
-        t2[l+2][c+1]=1; // ---BBB--
-        t2[l+2][c+2]=1; // ---B----
-        t2[l+2][c+3]=1;
-        t2[l+3][c+1]=1;
+        coordenadas[l+1][c+1]=1; // ---B----
+        coordenadas[l+2][c+1]=1; // ---BBB--
+        coordenadas[l+2][c+2]=1; // ---B----
+        coordenadas[l+2][c+3]=1;
+        coordenadas[l+3][c+1]=1;
         break;
     }
     case 3:
     {
-        t2[l+1][c+1]=1; // ---BBB---
-        t2[l+1][c+2]=1; // ----B----
-        t2[l+1][c+3]=1; // ----B----
-        t2[l+2][c+2]=1;
-        t2[l+3][c+2]=1;
+        coordenadas[l+1][c+1]=1; // ---BBB---
+        coordenadas[l+1][c+2]=1; // ----B----
+        coordenadas[l+1][c+3]=1; // ----B----
+        coordenadas[l+2][c+2]=1;
+        coordenadas[l+3][c+2]=1;
         break;
     }
     case 4:
-    {
-        t2[l+2][c+1]=1; // -----B---
-        t2[l+2][c+2]=1; // ---BBB---
-        t2[l+1][c+3]=1; // -----B---
-        t2[l+2][c+3]=1;
-        t2[l+3][c+3]=1;
-        break;
-    }
+        coordenadas[l+2][c+2]=1; // ---BBB---
+        coordenadas[l+1][c+3]=1; // -----B---
+        {
+            coordenadas[l+2][c+1]=1; // -----B---
+            coordenadas[l+2][c+3]=1;
+            coordenadas[l+3][c+3]=1;
+            break;
+        }
     }
     //inserir os navios que faltam
-
-       while(b[3]>0){
-
-        if(b[rnavios]<=0){
+    while(b[3]>0)
+    {
+        if(b[rnavios]<=0)
+        {
             rnavios++;
             i1--;
             i+=3;
@@ -67,7 +376,8 @@ void barcos(int t2[][11])
         {
             hv=rand()%2+1;
             cont=0;
-            if(rnavios==3){
+            if(rnavios==3)
+            {
                 hv=1;
             }
             if(hv==1)
@@ -76,32 +386,41 @@ void barcos(int t2[][11])
                     c=rand()%5+5;
                 else
                     c=rand()%9;
-                switch (rnavios){
-                    case 0:{
-                        l=rand()%5;
-                        break;}
-                    case 1:{
-                        l=rand()%7;
-                        break;}
-                    case 2:{
-                        l=rand()%8;
-                        break;}
-                    case 3:{
-                        l=rand()%9;
-                        break;}
+                switch (rnavios)
+                {
+                case 0:
+                {
+                    l=rand()%5;
+                    break;
                 }
-                        for(l1=l; l1<=l+i1; l1++)
+                case 1:
+                {
+                    l=rand()%7;
+                    break;
+                }
+                case 2:
+                {
+                    l=rand()%8;
+                    break;
+                }
+                case 3:
+                {
+                    l=rand()%9;
+                    break;
+                }
+                }
+                for(l1=l; l1<=l+i1; l1++)
+                {
+                    for(c1=c; c1<=c+2; c1++)
+                    {
+                        if(coordenadas[l1][c1]!=0)
                         {
-                            for(c1=c; c1<=c+2; c1++)
-                            {
-                                if(t2[l1][c1]!=0)
-                                {
-                                    l1=22;
-                                    c1=22;
-                                    cont=1;
-                                }
-                            }
+                            l1=22;
+                            c1=22;
+                            cont=1;
                         }
+                    }
+                }
             }
             if(hv==2)
             {
@@ -109,82 +428,290 @@ void barcos(int t2[][11])
                     l=rand()%5+5;
                 else
                     l=rand()%9;
-                switch (rnavios){
-                    case 0:{
-                        c=rand()%5;
-                        break;}
-                    case 1:{
-                        c=rand()%7;
-                        break;}
-                    case 2:{
-                        c=rand()%8;
-                        break;}
-                    case 3:{
-                        c=rand()%9;
-                        break;}
+                switch (rnavios)
+                {
+                case 0:
+                {
+                    c=rand()%5;
+                    break;
+                }
+                case 1:
+                {
+                    c=rand()%7;
+                    break;
+                }
+                case 2:
+                {
+                    c=rand()%8;
+                    break;
+                }
+                case 3:
+                {
+                    c=rand()%9;
+                    break;
+                }
                 }
                 for(l1=l; l1<=l+2; l1++)
                 {
                     for(c1=c; c1<=c+i1; c1++)
                     {
-                        if(t2[l1][c1]!=0)
+                        if(coordenadas[l1][c1]!=0)
                         {
                             l1=22;
                             c1=22;
                             cont=1;
                         }
-                }
-            }
-            }
-
-        }while(cont!=0);
-
-        switch(rnavios){
-            case 0:{
-                if (hv==1)       //navio de 4
-                    {
-                    t2[l+1][c+1]=2;
-                    t2[l+2][c+1]=2;
-                    t2[l+3][c+1]=2;
-                    t2[l+4][c+1]=2;
-                }
-                else{
-                    t2[l+1][c+1]=2;
-                    t2[l+1][c+2]=2;
-                    t2[l+1][c+3]=2;
-                    t2[l+1][c+4]=2;
-                }
-                break;
-            }
-            case 1:{
-                if(hv==1)      //barco de 3
-                {
-                    t2[l+1][c+1]=3;
-                    t2[l+2][c+1]=3;
-                    t2[l+3][c+1]=3;
-                }else{
-                    t2[l+1][c+1]=3;
-                    t2[l+1][c+2]=3;
-                    t2[l+1][c+3]=3;
-                }
-                 break;}
-            case 2:if(hv==1)          //barco de 2
-                {
-                    t2[l+1][c+1]=4;
-                    t2[l+2][c+1]=4;
-                }else{
-                    t2[l+1][c+1]=4;
-                    t2[l+1][c+2]=4;
-                }
-                break;
-            case 3: if(hv==1){
-                        t2[l+1][c+1]=5;  // barco de 1
                     }
-                break;
+                }
+            }
+        }
+        while(cont!=0);
+        switch(rnavios)
+        {
+        case 0:
+        {
+            if (hv==1) //navio de 4
+            {
+                coordenadas[l+1][c+1]=2;
+                coordenadas[l+2][c+1]=2;
+                coordenadas[l+3][c+1]=2;
+                coordenadas[l+4][c+1]=2;
+            }
+            else
+            {
+                coordenadas[l+1][c+1]=2;
+                coordenadas[l+1][c+2]=2;
+                coordenadas[l+1][c+3]=2;
+                coordenadas[l+1][c+4]=2;
+            }
+            break;
+        }
+        case 1:
+        {
+            if(hv==1) //barco de 3
+            {
+                coordenadas[l+1][c+1]=3+contb3;
+                coordenadas[l+2][c+1]=3+contb3;
+                coordenadas[l+3][c+1]=3+contb3;
+            }
+            else
+            {
+                coordenadas[l+1][c+1]=3+contb3;
+                coordenadas[l+1][c+2]=3+contb3;
+                coordenadas[l+1][c+3]=3+contb3;
+            }
+            contb3++;
+            break;
+        }
+        case 2:
+            if(hv==1) //barco de 2
+            {
+                coordenadas[l+1][c+1]=5+contb2;
+                coordenadas[l+2][c+1]=5+contb2;
+            }
+            else
+            {
+                coordenadas[l+1][c+1]=5+contb2;
+                coordenadas[l+1][c+2]=5+contb2;
+            }
+            contb2++;
+            break;
+        case 3:
+            if(hv==1)
+            {
+                coordenadas[l+1][c+1]=8; // barco de 1
+            }
+            break;
         }
         b[rnavios]-=1;
         cont=0;
-
-
+    }
 }
+void fnc_intro(void)
+{
+    printf("--------------------------------------------------------------------------------\n");
+    printf("   ______         _          _  _              _   _                      _ \n");
+    printf("   | ___ \\       | |        | || |            | \\ | |                    | |\n");
+    printf("   | |_/ /  __ _ | |_  __ _ | || |__    __ _  |  \\| |  __ _ __   __ __ _ | |\n");
+    printf("   | ___ \\ / _` || __|/ _` || || '_ \\  / _` | | . ` | / _` |\\ \\ / // _` || |\n");
+    printf("   | |_/ /| (_| || |_| (_| || || | | || (_| | | |\\  || (_| | \\ V /| (_| || |\n");
+    printf("   \\____/  \\__,_| \\__|\\__,_||_||_| |_| \\__,_| \\_| \\_/ \\__,_|  \\_/  \\__,_||_|  \n\n");
+    printf("\t\t\t\t Versao %.1f\n\n",versao);
+    printf("\t\t    Feito por: Daniel Barreiro e Fabio Gaspar\n\n");
+    printf("\t\t        Prima uma tecla para comecar...\n\n");
+    printf("\t\t\t     .  o ..\n");
+    printf("\t\t\t     o . o o.o\n");
+    printf("\t\t\t          ...oo\n");
+    printf("\t\t\t            __[]__\n");
+    printf("\t\t\t         __|_o_o_o\\__\n");
+    printf("\t\t\t         \\""""""""""/\n");
+    printf("\t\t\t          \\. ..  . /\n");
+    printf("\t\t\t     ^^^^^^^^^^^^^^^^^^^^\n");
+    printf("--------------------------------------------------------------------------------\n");
+    system("PAUSE");
+}
+void fnc_menu(void)
+{
+    system("cls");
+    int opcao;
+    do
+    {
+        printf("\n\n\n\n\n");
+        printf("          -------------------------------------------------------------\n");
+        printf("          |        .___  ___.  _______ .__   __.  __    __            |\n");
+        printf("          |        |   \\/   | |   ____||  \\ |  | |  |  |  |           |\n");
+        printf("          |        |  \\  /  | |  |__   |   \\|  | |  |  |  |           |\n");
+        printf("          |        |  |\\/|  | |   __|  |  . `  | |  |  |  |           |\n");
+        printf("          |        |  |  |  | |  |____ |  |\\   | |  `--'  |           |\n");
+        printf("          |        |__|  |__| |_______||__| \\__|  \\______/            |\n");
+        printf("          -------------------------------------------------------------\n");
+        printf("          |                                                           |\n");
+        printf("          |                    1 - Comecar Jogo                       |\n");
+        printf("          |                    2 - Intrucoes                          |\n");
+        printf("          |                    3 - Leaderboard                        |\n");
+        printf("          |                    0 - Sair                               |\n");
+        printf("          |                                                           |\n");
+        printf("          -------------------------------------------------------------\n");
+        scanf("\t\t\t%d",&opcao);
+        fflush(stdin);
+        if(opcao <0 || opcao>3)
+        {
+            printf("                         -----------------------------                    \n");
+            printf("                         |       Opcao Invalida!     |                    \n");
+            printf("                         -----------------------------                    \n");
+            Sleep(1000);
+            system("cls");
+        }
+    }
+    while (opcao<0 || opcao>3);
+    switch(opcao)
+    {
+    case 0:
+    {
+        exit(EXIT_SUCCESS);;
+        break;
+    }
+    case 1:
+    {
+        int navios=25;
+        fnc_barcos();
+        do
+        {
+            system("cls");
+            fnc_verificarBarcos();
+            fnc_tabuleiro();
+            fnc_tiro(&navios);
+        }
+        while (navios>0);
+        fnc_leaderboard();
+        jogadas=0;
+        break;
+    }
+    case 2:
+    {
+        fnc_intrucoes();
+        break;
+    }
+    case 3:
+    {
+        fnc_leaderboard('e');
+        break;
+    }
+    default:
+    {
+        fnc_final();
+        break;
+    }
+    }
+}
+void fnc_intrucoes(void)
+{
+    system("cls");
+    printf(" -------------------------------------------------------------------------------");
+    printf("|      O programa ira gerar as posicoes de 11 barcos aleatoriamente            |");
+    printf("|  Os barco gerados nao estaram juntos, tendo pelo menos uma casa entre eles   |");
+    printf("|               Poderam estar na vertical ou na horizontal                     |");
+    printf("|                       Existem 5 tipos de barcos:                             |");
+    printf("|    _                  _               _                 _             _      |");
+    printf("|   |_|_ _             |_|             |_|               |_|           |_|     |");
+    printf("|   |_|_|_|            |_|             |_|               |_|                   |");
+    printf("|   |_|                |_|             |_|                                     |");
+    printf("|                      |_|                                                     |");
+    printf("|                                                                              |");
+    printf("| 1-Porta Avioes   1-Barco de 4   2-Barcos de 3   3-Barcos de 2   4-Barcos de 1|");
+    printf("|                                                                              |");
+    printf("|               Ao comecar o jogo sera apresentado um tabuleiro                |");
+    printf("|          O jogador deve inserir uma linha (1-10) e uma coluna (A-J)          |");
+    printf("|    O tabuleiro ira mudar os carateres consoante a coordenada introduzida:    |");
+    printf("|                                                                              |");
+    printf("|                                 [");textcolor(9); printf("~"); textcolor(7); printf("] - Agua"); printf("                                   |");
+    printf("|                                 [");textcolor(11); printf("^"); textcolor(7); printf("] - Tiro Falhado"); printf("                           |");
+    printf("|                                 [");textcolor(7); printf("#"); textcolor(7); printf("] - Navio Atingido"); printf("                         |");
+    printf("|                                                                              |");
+    printf("|            O jogo termina quando os 11 barcos forem destruidos               |");
+    printf("--------------------------------------------------------------------------------\n");
+    system("PAUSE");
+    fnc_menu();
+}
+void fnc_tabuleiro(void)
+{
+    int c,l,n=1,nIndice=0;
+    char *nnavios[10];
+    nnavios[0] = "";
+    nnavios[1] = "Porta-Avioes";
+    nnavios[2] = "";
+    nnavios[3] = "Barco 4";
+    nnavios[4] = "";
+    nnavios[5] = "Barcos 3";
+    nnavios[6] = "";
+    nnavios[7] = "Barcos 2";
+    nnavios[8] = "";
+    nnavios[9] = "Barco 1";
+    textcolor(15); // poem a cor do texto em branco brilhante
+    printf("      -------------------------------------------        Navios Restantes:\n");
+    for(l=1; l<=10; l++)
+    {
+        printf("  %2.d |",n);
+        for(c=1; c<=10; c++)
+        {
+            textcolor(9);
+            if(coordenadas[l][c]>=0)
+            {
+                printf("   ~");
+            }
+            textcolor(7);
+            if(coordenadas[l][c]==-1)
+            {
+                printf("   #");
+            }
+            textcolor(11);
+            if(coordenadas[l][c]==-2)
+            {
+                printf("   ^");
+            }
+        }
+        textcolor(15); // poem a cor do texto em branco brilhante
+        printf("   |           ");
+        if((nIndice==1)||(nIndice==3)||(nIndice==5)||(nIndice==7)||(nIndice==9))
+        {
+            printf("%d ",vnavios[nIndice]);
+        }
+        if(nIndice < 10)
+        {
+            printf("%s",nnavios[nIndice]);
+        }
+        printf("\n");
+        nIndice++;
+        n++;
+    }
+    printf("      -------------------------------------------\n");
+    printf("         A   B   C   D   E   F   G   H   I   J   \n");
+    textcolor(7); // poem a cor do texto em branco
+    printf("\n  [");textcolor(9); printf("~"); textcolor(7); printf("] - Agua  "); printf("[");textcolor(11); printf("^"); textcolor(7); printf("] - Tiro Falhado  ");printf("[");textcolor(7); printf("#"); textcolor(7); printf("] - Navio Atingido\n\n");
+}
+int main ()
+{
+    fnc_intro();
+    fnc_menu();
+    return 0;
 }
