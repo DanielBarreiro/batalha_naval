@@ -6,78 +6,99 @@
 #define DIM 50
 #define versao 0.9
 
-typedef struct {
-    char nome[DIM];
-    int rank;
-}ranking;
+typedef struct { // cria uma estrutura com um array de strings e um inteiro
+    char nome[DIM]; // vai guardar o nome do jogador
+    int rank; // vai guardar o numero de  jogadas do jogador
+}ranking; // nome da estrutura
 
-int coordenadas[11][11];
-int vnavios[10],jogadas=0;
-ranking score[11];
+int coordenadas[11][11]; // variavel multidimensional onde vao ser guardadas as coordenadas da tabela
+                        // os barcos vão ser desenhados a partir dela
+int vnavios[10],jogadas=0;  // vnarios - array de inteiros que serve para armazenar o numero de cada navia que falta destruir
+                            // jogadas - variavel que vai armazenar o numero de jogadas que o jogador realiza ate o final do jogo
+ranking score[11]; //variavel do tipo de estrutura ranking, serve para armazenar os valores a demonstrar no ranking
+
+//as seguintes funções foram inicializadas para evitar warnings durante a execução do programa
 
 void fnc_menu();
 void fnc_tabuleiro();
 void fnc_verificarBarcos();
 void fnc_intrucoes();
 
-void quick_sort(ranking arr[],int low,int high)
+void quick_sort(ranking arr[],int low,int high) // funcao para ordenar o ranking do menor valor para o maior
 {
-    ranking temp;
-    int pivot,j,i;
+                                                //recebe as variaveis arr onde estao guardados todos os valores do ranking
+                                                //low- recebe o menor valor possivel , high- recebe o maior valor possivel
+                                                // ambos estes valor sao para ser usados no indice da variavel de estrutura
+
+    ranking temp;   //cria uma variavel de estrutura que vai alojar temporariamente o valor da variavel
+                    // "arr" de modo a efectuar a troca
+    int pivot,j,i; //pivot - indice de referencia para as trocas, j- vai armazenar o valor high, i- vai armazenar o valor low
     if(low<high)
     {
         pivot = low;
         i = low;
         j = high;
 
-        while(i<j)
+        while(i<j) // repete o ciclo enquanto o valor de i for inferior ao valor de j
         {
             while((arr[i].rank<=arr[pivot].rank)&&(i<high))
+//vai encontrar o valor acima do valor do pivot
+
             {
                 i++;
             }
 
             while(arr[j].rank>arr[pivot].rank)
+//vai encontrar o valor abaixo do valor do pivot
             {
                 j--;
             }
 
             if(i<j)
             {
+//vai trocar os valor em i e j de modo a por eles na ordem correcta
                 temp=arr[i];
                 arr[i]=arr[j];
                 arr[j]=temp;
             }
         }
-
+//troca o valor do arr no indice pivot pelo do indice j
         temp=arr[pivot];
         arr[pivot]=arr[j];
         arr[j]=temp;
-        quick_sort(arr,low,j-1);
-        quick_sort(arr,j+1,high);
+        quick_sort(arr,low,j-1);  //recursiva
+        quick_sort(arr,j+1,high); //recursiva
     }
 }
 
-void fnc_verificarBarcos() {
+void fnc_verificarBarcos() {//função para verificar os navios que restam
 
     int cont_pa=0,cont_b4=0,cont_b1=0,cont_b3_3=0,cont_b3_4=0,cont_b2_5=0,cont_b2_6=0,cont_b2_7=0;
+//variaveis que contam o numero de navios restantes
+//cont_pa - conta o porta-avioes, cont_b4 - conta o barco de 4,cont_b1 - conta os barcos de 1,cont_b3_3 - conta os barcos de 3 que sejam de numero 3
+//cont_b3_4 - conta os barcos de 3 que sejam de numero 4, cont_b2_5/6/7- contam os barcos de 2 com os numeros 5,6 e 7
     int c,l,s2,s3;
+//c - variavel usada para contar as colunas da tabela, l- variavel usada para contar as linhas da tabela
+//se2 - variavel usada para somar todos os barcos de 2, s3- variavel usada para somar todos os barcos de 3
 
+//ciclo que percorre a tabela inteira
     for(l=0;l<=10;l++){
         for(c=0;c<=10;c++){
-            switch(coordenadas[l][c]){
-                case 1: cont_pa++; break;
-                case 2: cont_b4++; break;
-                case 3: cont_b3_3++; break;
-                case 4: cont_b3_4++; break;
-                case 5: cont_b2_5++; break;
-                case 6: cont_b2_6++; break;
-                case 7: cont_b2_7++; break;
-                case 8: cont_b1++; break;
+            switch(coordenadas[l][c]){  // vai ver os valores da tabela nas posiçoes [l][c]
+                                        //cada valor acima de 0 representa um navio
+                case 1: cont_pa++; break; // aumenta o contador do porta-aviões
+                case 2: cont_b4++; break; // aumenta o contador do barco de 4
+                case 3: cont_b3_3++; break; // aumenta o contador dos barcos de 3 com o numero 3
+                case 4: cont_b3_4++; break; // aumenta o contador dos barcos de 3 com o numero 4
+                case 5: cont_b2_5++; break; // aumenta o contador dos barcos de 2 com o numero 5
+                case 6: cont_b2_6++; break; // aumenta o contador dos barcos de 2 com o numero 6
+                case 7: cont_b2_7++; break; // aumenta o contador dos barcos de 2 com o numero 7
+                case 8: cont_b1++; break; // aumenta o contador dos barcos de 1
             }
         }
     }
-    s2=cont_b2_5+cont_b2_6+cont_b2_7;
+
+//os seguintes if's verificam a existencia dos navios correspondentes, se existirem dao o valor 1 a variavel vnavios no indice correspondente
     if(cont_pa>0){
         vnavios[1]=1;
     }
@@ -105,18 +126,19 @@ void fnc_verificarBarcos() {
     if(cont_b2_7>0){
         cont_b2_7=1;
     }
+//os navios de 1 são os unicos sem verificação porque cada vez que são atinjidos destroem um
     vnavios[9]=cont_b1;
-    s2=cont_b2_5+cont_b2_6+cont_b2_7;
-    s3=cont_b3_4+cont_b3_3;
-    vnavios[7]=s2;
-    vnavios[5]=s3;
+    s2=cont_b2_5+cont_b2_6+cont_b2_7; //soma todos os contadores de navios de 2
+    s3=cont_b3_4+cont_b3_3; // soma todos os contadores de navios de 3
+    vnavios[7]=s2; //atribui a variavel vnavios o valor da soma dos navios de 2
+    vnavios[5]=s3; //atribui a variavel vnavios o valor da soma dos navios de 3
 
 }
 
-void fnc_tiro(int *barcos1)
+void fnc_tiro(int *barcos1) //função para verificar onde as coordenadas introduzidas acertam
 {
-    int c,c1;
-    char ch1;
+    int c,c1; //variavel c- armazena o valor inserido referente a linha, c1- armazena a conversao de char para int da variavel ch1
+    char ch1; // ch1 - armazena a letra inserida pelo utilizador que corresponde a coluna
     do
     {
         printf("Insira a linha (1-10)\n");
@@ -125,7 +147,7 @@ void fnc_tiro(int *barcos1)
         printf("Insira a coluna (A-J)\n");
         scanf("%c",&ch1);
         fflush(stdin);
-        switch(ch1){
+        switch(ch1){ // verifica qual a letra introduzida e converte-a para um numero atribuindo-o a variavel c1
 
         case 'a':
         case 'A': c1=1; break;
@@ -149,48 +171,61 @@ void fnc_tiro(int *barcos1)
         case 'J': c1=10; break;
     }
     }
-    while(c<1 || c>10 || c1<1 || c1>10);
+    while(c<1 || c>10 || c1<1 || c1>10); // repete os pedidos ate o utilizador inserir valores entre 1 e 10
 
-     if(coordenadas[c][c1]==-1)
+//valores de coordenadas
+// -1 - acertou no navio
+// 0 - agua
+// -2 - acertou na agua
+// >0 - localizações com navios
+
+     if(coordenadas[c][c1]==-1 || coordenadas[c][c1]==-2) // verifica se o utilizador ja introduzio a coordenada anteriormente
     {
         printf("Ja introduziu esta coordenada\n");
-        Sleep(1000);
+        Sleep(1000); //faz uma pausa de 1 segundo para dar tempo ao utlizador de ler o print
     }
-    if(coordenadas[c][c1]>0)
+    if(coordenadas[c][c1]>0) //verifica se a coordenada introduzida tem um navio
     {
         printf("Acertou em um navio!\n");
-        coordenadas[c][c1]=-1;
-        *barcos1-=1;
-        Sleep(1000);
+        coordenadas[c][c1]=-1; // muda o valor da coordenada para -1
+        *barcos1-=1; // diminui um valor ao total de barcos restantes
+        Sleep(1000); //faz uma pausa de 1 segundo para dar tempo ao utlizador de ler o print
     }
-    if(coordenadas[c][c1]==0 || coordenadas[c][c1]==-2)
+    if(coordenadas[c][c1]==0) //verifica se a coordenada introduzida não tem nada
     {
         printf("Acertou na agua\n");
-        coordenadas[c][c1]=-2;
-        Sleep(1000);
+        coordenadas[c][c1]=-2; //muda o valor da coordenada para -2
+        Sleep(1000);//faz uma pausa de 1 segundo para dar tempo ao utlizador de ler o print
     }
-    jogadas+=1;
+    jogadas+=1; //aumenta o numero total de jogadas
 }
-void fnc_barcos(int t2[][11])
+void fnc_barcos(int t2[][11]) //função para gerar os barcos
 {
-    int b[4];
-    int c,l,d,hv,c1,l1,cont=0,rnavios=0,i=0,i1=5,b_3=0,b_2=0;
+    int b[4]; //variavel que conta o numero dos navios que faltam gerar
+    int c,l,d,hv,c1,l1,cont=0,rnavios=0,i1=5,b_3=0,b_2=0;
+//c - valor random da coluna, l- valor random da linha, d- direção do porta-avioes, c1- usado no ciclo para percorrer a tabela, equivale a coluna
+//l1- usado no ciclo para percorrer a tabela, equivale a linha, cont- usado para sair do ciclo do...while, rnavios- variavel usada como indice de b[4]
+//i1- variavel utilizada para diminuir o limite da caixa onde são inseridos os navios
+//b_3- variavel usada para mudar o valor do barco de 3, de 3 para 4, b_2- variavel usada para mudar o valor do barco de 2, de 5 para 7
+//hv-  valor random, entre 1 e 2, que vai determinar se os navios sao colocados horizontal ou verticalmente
     for(l=0; l<=10; l++)
+//percorre o array multidimensional todo, inicializando todas as posições a 0
     {
         for(c=0; c<=10; c++)
         {
             coordenadas[l][c]=0;
         }
     }
-    b[0]=1;
-    b[1]=2;
-    b[2]=3;
-    b[3]=4;
+    b[0]=1;// navio de 4
+    b[1]=2;// navios de 3
+    b[2]=3; //navios de 2
+    b[3]=4; //navios de 1
     d=rand()%4+1; //o d vai mudar a diracção do navio
     c=rand()%6; //Coordenada para o porta-avioes
     l=rand()%6; // tem de ser inferior a 6 senao pode sair fora do tabuleiro
     switch (d)
     {
+//vai inserir o porta-aviões tende em conta a direção
     case 1:
     {
         coordenadas[l+1][c+2]=1; // ----B---
@@ -229,30 +264,36 @@ void fnc_barcos(int t2[][11])
     }
     }
     //inserir os navios que faltam
-    while(b[3]>0)
+    while(b[3]>0) //vai inicializar um ciclo enquanto não tiverem sido colocados todos os navios
     {
         if(b[rnavios]<=0)
         {
+//verifica se o valor de b no indice rnavios é igual ou inferior a 0
+//se for incrementa o rnavios, passando para o proximo tipo
+//e diminui a variavel i1, diminuindo a "caixa" onde é possivel colocar um navio
             rnavios++;
             i1--;
-            i+=3;
         }
         do
         {
-            hv=rand()%2+1;
+//o ciclo do...while vai-se repetir ate ser encontrada uma "caixa" com posições livres
+            hv=rand()%2+1; //gera a direção do navio, horizontal ou vertical
             cont=0;
             if(rnavios==3)
             {
+//se estiverem a ser inseridos os navios de 1, força o hv a ser 1
                 hv=1;
             }
             if(hv==1)
             {
+//o proximo if vai forçar o random a gerar numeros afastandos
                 if(c<=4)
                     c=rand()%5+5;
                 else
                     c=rand()%9;
                 switch (rnavios)
                 {
+//o switch vai gerar a posição da linha de acordo com o tipo de navio, tendo em conta que, quanto maior for, menor será o espaço livre
                 case 0:
                 {
                     l=rand()%5;
@@ -276,10 +317,12 @@ void fnc_barcos(int t2[][11])
                 }
                 for(l1=l; l1<=l+i1; l1++)
                 {
+//verifica todas as posições da caixa começando no canto superior esquerdo e acabando no canto inferior direito
                     for(c1=c; c1<=c+2; c1++)
                     {
                         if(coordenadas[l1][c1]!=0)
                         {
+//as seguintes intruções forçam o ciclo a terminar assim que encontrar um navio
                             l1=22;
                             c1=22;
                             cont=1;
@@ -289,12 +332,14 @@ void fnc_barcos(int t2[][11])
             }
             if(hv==2)
             {
+//o proximo if vai forçar o random a gerar numeros afastandos
                 if(l<=4)
                     l=rand()%5+5;
                 else
                     l=rand()%9;
                 switch (rnavios)
                 {
+//o switch vai gerar a posição da coluna de acordo com o tipo de navio, tendo em conta que, quanto maior for o navio, menor será o espaço livre
                 case 0:
                 {
                     c=rand()%5;
@@ -318,10 +363,12 @@ void fnc_barcos(int t2[][11])
                 }
                 for(l1=l; l1<=l+2; l1++)
                 {
+//verifica todas as posições da caixa começando no canto superior esquerdo e acabando no canto inferior direito
                     for(c1=c; c1<=c+i1; c1++)
                     {
                         if(coordenadas[l1][c1]!=0)
                         {
+//as seguintes intruções forçam o ciclo a terminar assim que encontrar um navio
                             l1=22;
                             c1=22;
                             cont=1;
@@ -333,6 +380,7 @@ void fnc_barcos(int t2[][11])
         while(cont!=0);
         switch(rnavios)
         {
+//o switch vai inserir os navios nas suas posições dentro da "caixa", o tipo de navio vai depender do rnavios
         case 0:
         {
             if (hv==1) //navio de 4
@@ -388,29 +436,34 @@ void fnc_barcos(int t2[][11])
             }
             break;
         }
-        b[rnavios]-=1;
-        cont=0;
+        b[rnavios]-=1; //retira um valor a variavel b no indice rnavios
+        cont=0; //faz reset ao contador
     }
 }
 
-void fnc_leaderboard()   // modo é o nome da operação que a função vai efetuar, escrever ou ler
+void fnc_leaderboard()   // função para criar e mostrar o ranking
 {
 
-    ranking score[11];
     int cont,n2=0,ceof=0,n1=1;
+//cont- contador usado nos ciclos for, n2- indice da variavel de estrutura ranking, ceof- variavel usada para contar o numero de linhas existentes no ficheiro
+// n1- variavel usada para mostrar a posição no ranking, de 1 a 10
     char ch[DIM];
+//ch- variavel que vai ler todas as linhas do ficheiro ate chegar ao NULL
     FILE *ficheiro;
+//ficheiro- apontador usado manusear o ficheiro txt
 
-    ficheiro= fopen("ranking.txt","r");
+    ficheiro= fopen("ranking.txt","r"); //abre o ficheiro txt no modo read
     system("cls");
     if(ficheiro==NULL)
     {
+//cria um novo ficheiro se ele não existe
         ficheiro=fopen("ranking.txt","w+");
         fclose(ficheiro);
         ficheiro=fopen("ranking.txt","r");
     }
-    fseek(ficheiro,0,SEEK_SET);
+    fseek(ficheiro,0,SEEK_SET);//poem o apontador no inicio do ficheiro
     if(jogadas>24){
+//insere um novo valor no ranking se o utilizador tiver acabado o jogo
         printf("Insira o nome para o ranking (Nao pode conter espacos)\n");
         gets(score[n2].nome);
         score[n2].rank=jogadas;
@@ -419,39 +472,48 @@ void fnc_leaderboard()   // modo é o nome da operação que a função vai efet
         system("cls");
     }
     while((fgets(ch,DIM,ficheiro)) != NULL)
+//ciclo que percorre todas as linhas do ficheiro ate ser NULL e incrementa a variavel ceof
     {
         ceof++;
     }
-    fclose(ficheiro);
-    ficheiro=fopen("ranking.txt","r");
+    fclose(ficheiro); //fecha o ficheiro
+    ficheiro=fopen("ranking.txt","r"); //abre o ficheiro txt no modo de leitura
+//o proximo if vai servir para diferenciar se o ranking é chamado depois do jogo ou no menu
     if(n2==0){
+//o n2 é igual a 0 se o utilizador nao tiver jogado, mostra apenas os valores presentes no ficheiro
         while(n2<ceof){
+//ciclo que vai atribuir os valores presentes no ficheiro a variavel score
             fscanf(ficheiro,"%s%d",score[n2].nome,&score[n2].rank);
             fflush(stdin);
             n2++;
     }
     }else{
+//se não for igual a 0 é porque existe um valor que não pertence ao ficheiro
         while(n2<=ceof){
+//ciclo que vai atribuir os valores presentes no ficheiro a variavel score
             fscanf(ficheiro,"%s%d",score[n2].nome,&score[n2].rank);
             fflush(stdin);
             n2++;
     }
     }
-    fclose(ficheiro);
-    ficheiro=fopen("ranking.txt","w+");
+    fclose(ficheiro); //fecha o ficheiro
+    ficheiro=fopen("ranking.txt","w+"); //abre o ficheiro txt no modo de escrita e leitura, apagando os valores anteriormente presentes
     printf("\n");
     if(n2>1){
+//verifica se existe mais que um valor para o ranking
     quick_sort(score,0,n2-1);
     }
     if(n2>10){
+//obriga o n2 a ser igual a 10 no caso de este ser superior, isto vai fazer com que apenas os 10 melhores scores sejam postos no ficheiro
         n2=10;
     }
     for(cont=0; cont<n2; cont++)
     {
+//insere todos os valores de n2 no ficheiro
         fprintf(ficheiro,"%s  %d\n",score[cont].nome,score[cont].rank);
         fflush(stdin);
     }
-
+//as seguintes instruções fazem print ao ranking, com os respectivos valores
     printf("\t\t =======================================\n");
     printf("\t\t|               Ranking                 |\n");
     printf("\t\t =======================================\n");
@@ -471,7 +533,7 @@ void fnc_leaderboard()   // modo é o nome da operação que a função vai efet
     system("PAUSE");
 }
 
-void fnc_intro(void)
+void fnc_intro(void) //função para mostrar o intro usando prints
 {
 
     printf("--------------------------------------------------------------------------------\n");
@@ -494,10 +556,13 @@ void fnc_intro(void)
     printf("--------------------------------------------------------------------------------\n");
     system("PAUSE");
 }
-void fnc_tabuleiro()
+void fnc_tabuleiro() //função para desenhar o tabuleiro
 {
     int c,l,n=1,nIndice=0;
+//c- coluna da tabela, l- linha da tabela, n- variavel que mostra os numeros de 1 a 10 ao lado da tabela
+//nIndice- indice do nnavios
     char *nnavios[10];
+//nnavios- variavel que guarda o nome dos navios
     nnavios[0] = "";
     nnavios[1] = "Porta-Avioes";
     nnavios[2] = "";
@@ -509,24 +574,26 @@ void fnc_tabuleiro()
     nnavios[8]  = "";
     nnavios[9] = "Barco 1";
 
+//as proximas instruções desenham a tabela
     textcolor(15); // poem a cor do texto em branco brilhante
     printf("      -------------------------------------------        Navios Restantes:\n");
     for(l=1; l<=10; l++)
     {
+//ciclo que percorre todas as posições do tabuleiro 
         printf("  %2.d |",n);
         for(c=1; c<=10; c++)
         {
-            textcolor(9);
+            textcolor(9);//poem a cor do texto em azul claro
             if(coordenadas[l][c]>=0)
             {
                 printf("   ~");
             }
-            textcolor(7);
+            textcolor(7);//poem a cor do texto em branco
             if(coordenadas[l][c]==-1)
             {
                 printf("   #");
             }
-            textcolor(11);
+            textcolor(11); //poem a cor do texto em verde-agua
             if(coordenadas[l][c]==-2)
             {
                 printf("   ^");
@@ -535,6 +602,7 @@ void fnc_tabuleiro()
         textcolor(15); // poem a cor do texto em branco brilhante
         printf("   |          ");
         if((nIndice==1)||(nIndice==3)||(nIndice==5)||(nIndice==7)||(nIndice==9)){
+//if para alinhar o nº dos navios restantes com o nome
                 printf("%d ",vnavios[nIndice]);
         }
         if(nIndice < 10) {
@@ -619,7 +687,7 @@ int opcao;
 
 }
 
-void fnc_intrucoes(){
+void fnc_intrucoes(){ //função para mostrar as intruções usando prints
 
         system("cls");
         printf("--------------------------------------------------------------------------------\n");
@@ -633,10 +701,9 @@ void fnc_intrucoes(){
         system("PAUSE");
         fnc_menu();
 }
-
 int main ()
 {
-    fnc_intro();
-    fnc_menu();
+    fnc_intro(); //chama a função intro
+    fnc_menu; //chama a função menu
     return 0;
 }
